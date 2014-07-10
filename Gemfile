@@ -1,4 +1,4 @@
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in ProtoTest.Corundum.gemspec
+# Specify your gem's dependencies in Corundum.gemspec
 gemspec
