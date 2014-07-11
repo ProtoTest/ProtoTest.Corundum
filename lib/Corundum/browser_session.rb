@@ -1,6 +1,7 @@
 require 'selenium-webdriver'
 
 class BrowserSession
+
   FIREFOX = :firefox
   CHROME = :chrome
   SAFARI = :safari
@@ -15,8 +16,11 @@ class BrowserSession
     @browser_type = browser_type
   end
 
-  def open(url)
+  def launch
     @driver = Selenium::WebDriver.for :firefox
+  end
+
+  def open_url(url)
     @driver.get(url)
   end
 

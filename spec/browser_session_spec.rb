@@ -14,7 +14,8 @@ describe 'Browser session' do
 
   it 'should launch firefox when browser_type is firefox' do
     browser = BrowserSession.new(BrowserSession::FIREFOX)
-    browser.open('http://www.google.com')
+    browser.launch
+    browser.open_url('http://www.google.com')
     sleep(5)
     browser.close
   end
