@@ -3,7 +3,7 @@ require 'uri'
 class Corundum::Selenium::Driver < Corundum::Driver::Base
   attr_reader :driver
 
-  DEFAULT_OPTIONS = { :browser => :firefox }
+  DEFAULT_OPTIONS = {:browsers => [{ :browser => :firefox }]}
 
   def browser
     unless @browser
