@@ -4,10 +4,8 @@ require 'corundum'
 describe 'Browser session' do
 
   it 'should initialize a new browser session' do
-
     browser1 = BrowserSession.new(BrowserSession::CHROME)
     browser2 = BrowserSession.new(BrowserSession::FIREFOX)
-
     puts(browser1.browser_type)
     puts(browser2.browser_type)
   end
@@ -19,4 +17,16 @@ describe 'Browser session' do
     sleep(5)
     browser.close
   end
+
+  it 'should launch browser specified from config file' do
+    ENV['CONFIG_FILE'] = 'spec/config.yaml'
+    config = CorundumConfig.new
+    puts config.screenshot_on_error
+    browser = BrowserSession.new(config.browsers[0]['browser'])
+    browser.launch
+    browser.open_url('http://www.google.com')
+    sleep(5)
+    browser.close
+  end
+
 end
