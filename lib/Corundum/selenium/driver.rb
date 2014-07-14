@@ -7,6 +7,8 @@ class Corundum::Selenium::Driver < Corundum::Driver::Base
 
   def browser
     unless @browser
+      @browser = Selenium::WebDriver.for(:firefox)
+
       main = Process.pid
       at_exit do
         # Store the exit status of the test run since it goes away after calling the at_exit proc...
