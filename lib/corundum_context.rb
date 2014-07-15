@@ -1,12 +1,17 @@
 require 'rspec'
 require 'corundum/core'
+require 'Corundum/config'
+
 shared_context 'corundum context' do
   include Corundum
+
   before do
-    @driver = Selenium::WebDriver.for :firefox
+    @config = CorundumConfig.new
+    @driver = Selenium::WebDriver.for(@config.browser.intern)
   end
 
   after do
     @driver.quit
   end
+
 end

@@ -1,17 +1,25 @@
 ---
-# list of browsers to run for all tests
-browsers:
-  # browser options
-  - browser:    firefox
-    name:       firefox 1920x1080
-    screensize: 1920x1080
-    host_ip:    10.10.1.80
-    host_port:  8080
 
-  - browser:    firefox
-    screensize: fullscreen
+#browsers:
+#  # browser parameters
+#  - browser:    chrome
+#    name:       firefox 1920x1080
+#    screensize: 1920x1080
+#    host_ip:    10.10.1.80
+#    host_port:  8080
+#
+#  - browser:    firefox
+#    screensize: fullscreen
+#
+#  - browser:    chrome
 
-  - browser:    chrome
+browser: firefox
+urls:
+  #url parameters
+  - http://www.google.com
+  - http://www.prototest.com
+  - http://www.github.com
+
 
 # list of test-runtime options
 screenshot_on_failure: true

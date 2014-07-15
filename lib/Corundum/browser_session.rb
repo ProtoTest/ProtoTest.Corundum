@@ -12,10 +12,8 @@ class BrowserSession
 
   attr_reader :browser_type
 
-  def
   def initialize(browser_type)
     @browser_type = browser_type
-
   end
 
   def launch
@@ -29,4 +27,5 @@ class BrowserSession
   def close
     @driver.quit
   end
+
 end

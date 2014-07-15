@@ -19,13 +19,16 @@ describe 'Browser session' do
   end
 
   it 'should launch browser specified from config file' do
-    ENV['CONFIG_FILE'] = 'spec/config.yaml'
+    ENV['CONFIG_FILE'] ||= 'spec/config.yaml'
     config = CorundumConfig.new
-    puts config.screenshot_on_error
+
     browser = BrowserSession.new(config.browsers[0]['browser'])
     browser.launch
-    browser.open_url('http://www.google.com')
-    sleep(5)
+    config.urls.each do | url |
+      browser.open_url(url)
+      sleep(3)
+    end
+    
     browser.close
   end
 
