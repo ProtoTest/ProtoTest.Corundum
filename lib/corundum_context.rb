@@ -1,5 +1,5 @@
 require 'rspec'
-require 'corundum/core'
+require 'Corundum/core'
 require 'Corundum/config'
 
 shared_context 'corundum context' do

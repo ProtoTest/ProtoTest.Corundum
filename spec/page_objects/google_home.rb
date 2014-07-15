@@ -1,4 +1,4 @@
-require 'corundum'
+require 'spec/spec_helper'
 
 class GoogleHome < Corundum
   attr_reader :search_box, :lucky_button

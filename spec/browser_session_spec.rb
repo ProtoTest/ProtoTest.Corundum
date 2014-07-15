@@ -1,5 +1,5 @@
 require 'rspec'
-require 'corundum'
+require 'spec_helper'
 
 describe 'Browser session' do
 
@@ -22,13 +22,10 @@ describe 'Browser session' do
     ENV['CONFIG_FILE'] ||= 'spec/config.yaml'
     config = CorundumConfig.new
 
-    browser = BrowserSession.new(config.browsers[0]['browser'])
+    browser = BrowserSession.new(config.browser)
     browser.launch
-    config.urls.each do | url |
-      browser.open_url(url)
-      sleep(3)
-    end
-    
+    browser.open_url(config.url)
+    sleep(3)
     browser.close
   end
 
