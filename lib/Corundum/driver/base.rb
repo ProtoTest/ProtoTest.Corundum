@@ -1,3 +1,9 @@
+module Corundum
+  module Driver
+
+  end
+end
+
 class Corundum::Driver::Base
   def current_url
     raise NotImplementedError

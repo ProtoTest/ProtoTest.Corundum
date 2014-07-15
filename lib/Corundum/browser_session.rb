@@ -1,4 +1,5 @@
-require 'selenium-webdriver'
+require 'spec_helper'
+require 'corundum/selenium/driver'
 
 class BrowserSession
 
@@ -17,11 +18,11 @@ class BrowserSession
   end
 
   def launch
-    @driver = Selenium::WebDriver.for :firefox
+    @driver = Corundum::Selenium::Driver.new(:browsers => [{:browser => @browser_type}])
   end
 
   def open_url(url)
-    @driver.get(url)
+    @driver.visit(url)
   end
 
   def close

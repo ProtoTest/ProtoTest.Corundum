@@ -1,4 +1,10 @@
 require 'uri'
+require 'base'
+
+module Corundum
+  module Selenium
+  end
+end
 
 class Corundum::Selenium::Driver < Corundum::Driver::Base
   attr_reader :driver
