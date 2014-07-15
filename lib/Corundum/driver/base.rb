@@ -1,10 +1,14 @@
+#
+# Methods on standby in case a non-selenium driver needs to be implemented
+#
+
 module Corundum
   module Driver
-
   end
 end
 
 class Corundum::Driver::Base
+
   def current_url
     raise NotImplementedError
   end
@@ -80,4 +84,5 @@ class Corundum::Driver::Base
   def no_such_window_error
     NotImplementedError
   end
+
 end

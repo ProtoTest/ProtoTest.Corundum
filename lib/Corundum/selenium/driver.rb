@@ -1,14 +1,13 @@
 require 'uri'
-require 'base'
+require 'corundum/driver/base'
+require 'selenium-webdriver'
 
 module Corundum
   module Selenium
   end
 end
 
-class Corundum::Selenium::Driver < Corundum::Driver::Base
-  attr_reader :driver
-
+class Corundum::Selenium::Driver < Corundum::Driver::Base   #Inherits from Base in case non-selenium driver is desired
   DEFAULT_OPTIONS = {:browsers => [{ :browser => :firefox }]}
 
   def browser
@@ -32,7 +31,7 @@ class Corundum::Selenium::Driver < Corundum::Driver::Base
       require 'selenium-webdriver'
     rescue LoadError => e
       if e.message =~ /selenium-webdriver/
-        raise LoadError, "Capybara's selenium driver is unable to load `selenium-webdriver`, please install the gem and add `gem 'selenium-webdriver'` to your Gemfile if you are using bundler."
+        raise LoadError, "Driver is unable to load `selenium-webdriver`.  Please install the gem and add `gem 'selenium-webdriver'`."
       else
         raise e
       end

@@ -4,7 +4,7 @@ require 'yaml'
 
 class CorundumConfig
 
-  attr_reader :config_file, :browser, :url, :screenshot_on_error
+  attr_reader :config_file, :browser, :url #, :screenshot_on_error
 
   def initialize
     @config_file = ENV['CONFIG_FILE']
@@ -14,7 +14,7 @@ class CorundumConfig
     @config = YAML.load_file(@config_file)
     @browser = config_or_default('browser', :firefox)
     @url = config_or_default('url', [:url => 'http://www.prototest.com'])
-    #@screenshot_on_error = config_or_default('@screenhot_on_error', true)
+    #@screenshot_on_error = config_or_default('@screenshot_on_error', true)
   end
 
   def config_or_default(config_key, default)

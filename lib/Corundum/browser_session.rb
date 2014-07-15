@@ -1,8 +1,6 @@
-require 'spec_helper'
 require 'corundum/selenium/driver'
 
 class BrowserSession
-
   FIREFOX = :firefox
   CHROME = :chrome
   SAFARI = :safari
@@ -11,7 +9,7 @@ class BrowserSession
   IPHONE_DEFAULT = :iphone
   IPAD_DEFAULT = :ipad
 
-  attr_reader :browser_type
+  attr_reader :browser_type, :driver
 
   def initialize(browser_type)
     @browser_type = browser_type
