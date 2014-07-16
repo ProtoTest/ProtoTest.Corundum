@@ -4,7 +4,7 @@ require 'spec_helper'
 describe 'Browser session' do
 
   it 'should initialize a new browser session' do
-    browser1 = BrowserSession.new(BrowserSession::CHROME)
+    browser1 = Driver.new(:firefox)
     browser2 = BrowserSession.new(BrowserSession::FIREFOX)
     puts(browser1.browser_type)
     puts(browser2.browser_type)
@@ -13,11 +13,10 @@ describe 'Browser session' do
   it 'should launch browser specified from config file' do
     ENV['CONFIG_FILE'] ||= 'spec/config.yaml'
     config = CorundumConfig.new
-    browser = BrowserSession.new(config.browser)
-    browser.launch
-    browser.open_url(config.url)
+    browser = Driver.for(config.browser.intern)
+    browser.visit(config.url)
     sleep(3)
-    browser.close
+    browser.quit
   end
 
   it 'should launch firefox when browser_type is firefox and then click an element' do

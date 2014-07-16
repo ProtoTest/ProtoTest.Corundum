@@ -1,3 +1,4 @@
 require 'Corundum/config'
-require 'Corundum/browser_session'
 require 'Corundum/core'
+require 'corundum/selenium/driver'
+require 'corundum_context'

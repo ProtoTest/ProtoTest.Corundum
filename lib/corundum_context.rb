@@ -1,18 +1,18 @@
 require 'rspec'
-require 'corundum/config'
-require 'corundum/core'
+require 'corundum'
+include Corundum::Selenium
+
 
 shared_context 'corundum context' do
   include Corundum
 
-  before do
-    Corundum.config= CorundumConfig.new
-    Corundum.session= BrowserSession.new(Corundum.config.browser)
-    Corundum.session.launch
+  before :all do
+    self.config = CorundumConfig.new
+    self.session = Driver.for(config.browser.intern)
   end
 
-  after do
-    @session.close
+  after :all do
+    session.quit
   end
 
 end
