@@ -1,5 +1,7 @@
 require 'selenium-webdriver'
 
+# Core class - allows reusable actions to be performed in the same instance of a single test
+
 module Corundum
 
   @@config = nil

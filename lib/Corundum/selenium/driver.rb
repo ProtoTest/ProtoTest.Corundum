@@ -7,13 +7,14 @@ module Corundum
   end
 end
 
-class Corundum::Selenium::Driver < Selenium::WebDriver::Driver #Inherits from Base in case non-selenium driver is desired
-  def find_element(*args)
-    Element.new(super(*args), *args)
-  end
+class Corundum::Selenium::Driver < Selenium::WebDriver::Driver  #Corundum driver class wraps around the Selenium Webdriver driver
 
   def visit(path)
     navigate.to(path)
+  end
+
+  def close
+    quit
   end
 
   def go_back
@@ -42,6 +43,10 @@ class Corundum::Selenium::Driver < Selenium::WebDriver::Driver #Inherits from Ba
 
   def evaluate_script(script)
     execute_script "return #{script}"
+  end
+
+  def find_element(*args)
+    Element.new(super(*args), *args)
   end
 
   def save_screenshot(path, options={})

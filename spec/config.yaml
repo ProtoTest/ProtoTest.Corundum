@@ -1,7 +1,9 @@
 ---
 browser: firefox
 url: http://www.google.com
+log_level: DEBUG
+# Log level options: MIN, INFO, DEBUG
 
 # list of test-runtime options
 #TODO screenshot_on_failure: true
-#TODO log_level:
+
