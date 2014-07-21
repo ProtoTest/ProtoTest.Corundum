@@ -1,6 +1,5 @@
 #require 'uri'
 require 'selenium-webdriver'
-require 'corundum/selenium/element'
 
 module Corundum
   module Selenium
@@ -9,67 +8,78 @@ end
 
 class Corundum::Selenium::Driver < Selenium::WebDriver::Driver  #Corundum driver class wraps around the Selenium Webdriver driver
 
-  def visit(path)
-    navigate.to(path)
+  DEFAULT_OPTIONS = {:browsers => [{ :browser => :firefox }]}
+
+  @@driver = nil
+  @@exit_status = nil
+  @@frame_handles = {}
+
+  def self.driver
+    unless @@driver
+      @@driver = Selenium::WebDriver.for(:firefox)
+      @@driver.manage.timeouts.implicit_wait = 30  # use config
+    end
+
+    @@driver
   end
 
-  def close
-    quit
+  def self.visit(path)
+    driver.navigate.to(path)
   end
 
-  def go_back
-    navigate.back
+  def self.quit
+    driver.quit
   end
 
-  def go_forward
-    navigate.forward
+  def self.go_back
+    driver.navigate.back
   end
 
-  def html
-    page_source
+  def self.go_forward
+    driver.navigate.forward
   end
 
-  def title
-    title
+  def self.html
+    driver.page_source
   end
 
-  def current_url
-    current_url
+  def self.title
+    driver.title
   end
 
-  def execute_script(script)
-    execute_script script
+  def self.current_url
+    driver.current_url
   end
 
-  def evaluate_script(script)
-    execute_script "return #{script}"
+  def self.execute_script(script)
+    driver.execute_script script
   end
 
-  def find_element(*args)
-    Element.new(super(*args), *args)
+  def self.evaluate_script(script)
+    driver.execute_script "return #{script}"
   end
 
-  def save_screenshot(path, options={})
-    save_screenshot(path)
+  def self.save_screenshot(path, options={})
+    driver.save_screenshot(path)
   end
 
-  def reset!
+  def self.reset!
     # Use instance variable directly so we avoid starting the browser just to reset the session
     begin
       begin
-        manage.delete_all_cookies
+        driver.manage.delete_all_cookies
       rescue Selenium::WebDriver::Error::UnhandledError
         # delete_all_cookies fails when we've previously gone
         # to about:blank, so we rescue this error and do nothing
         # instead.
       end
-      navigate.to("about:blank")
+      driver.navigate.to("about:blank")
     rescue Selenium::WebDriver::Error::UnhandledAlertError
       # This error is thrown if an unhandled alert is on the page
       # Firefox appears to automatically dismiss this alert, chrome does not
       # We'll try to accept it
       begin
-        switch_to.alert.accept
+        driver.switch_to.alert.accept
       rescue Selenium::WebDriver::Error::NoAlertPresentError
         # The alert is now gone - nothing to do
       end
