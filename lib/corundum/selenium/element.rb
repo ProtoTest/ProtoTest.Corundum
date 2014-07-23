@@ -10,13 +10,79 @@ module Corundum
   end
 end
 
+include Corundum
+
+
+class Corundum::ElementVerification
+
+  @@fail_base_str = "ELEMENT VERIFICATION ERROR::"
+  @@pass_base_str = "ELEMENT VERIFICATION PASSED::"
+
+  #
+  # @param [Corundum::Selenium::Element] element
+  # @param [Integer] timeout
+  # @param [Boolean] is_true # TODO: Pick a better goddamn name
+  def initialize(element, timeout, is_true=true)
+    @element = element
+    @timeout = timeout
+    @is_true = is_true
+
+  end
+
+  def not
+    ElementVerification.new(@element, @timeout, false)
+  end
+
+  # TODO: Put the NOT verification string in the pass/fail string!å
+  def text(text)
+    element_text = @element.text
+
+    condition = @element.present? and element_text.eql?(text)
+    if condition == @is_true
+      puts ("#{@@pass_base_str} Verified element text '#{text}'")
+    else
+      raise "#{@@fail_base_str} Failed to verify element text condition '#{text}. Actual value is #{element_text}'"
+    end
+  end
+
+  def visible
+
+  end
+
+  def present
+
+  end
+
+  def value(value)
+
+  end
+
+  def selected
+
+  end
+
+  def attribute(attribute, value)
+
+  end
+
+  def css(attribute, value)
+
+  end
+
+
+end
+
 class Corundum::Selenium::Element
 
   def initialize(name, by, locator)
     @name = name
     @by = by
     @locator = locator
+
+    # wrapped driver
     @driver = Corundum::Selenium::Driver.driver
+
+    # selenium web element
     @element = nil
   end
 
@@ -31,6 +97,11 @@ class Corundum::Selenium::Element
 
   def element= e
     @element = e
+  end
+
+  def verify(timeout=0)
+    timeout = Corundum::Config::ELEMENT_TIMEOUT if timeout.eql?(0)
+    ElementVerification.new(self, timeout)
   end
 
   def attribute(name)

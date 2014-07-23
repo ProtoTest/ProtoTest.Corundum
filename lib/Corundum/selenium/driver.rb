@@ -29,7 +29,7 @@ class Corundum::Selenium::Driver  #Corundum driver class wraps around the Seleni
 
   def self.quit
     driver.quit
-    @@driver = nil
+    driver = nil
   end
 
   def self.go_back
