@@ -10,8 +10,9 @@ shared_context 'corundum context' do
   #   self.session = Driver.for(config.browser.intern)
   # end
 
-  after :all do
-    Corundum::Selenium::Driver.driver.quit
+  after :each do
+    puts ('>>> EXECUTING CLEANUP')
+    Corundum::Selenium::Driver.quit
   end
 
 end

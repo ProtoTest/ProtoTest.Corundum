@@ -22,10 +22,10 @@ class Corundum::ElementVerification
   # @param [Corundum::Selenium::Element] element
   # @param [Integer] timeout
   # @param [Boolean] is_true # TODO: Pick a better goddamn name
-  def initialize(element, timeout, is_true=true)
+  def initialize(element, timeout, condition=true)
     @element = element
     @timeout = timeout
-    @is_true = is_true
+    @condition = condition
 
   end
 
@@ -37,8 +37,8 @@ class Corundum::ElementVerification
   def text(text)
     element_text = @element.text
 
-    condition = @element.present? and element_text.eql?(text)
-    if condition == @is_true
+    test_result = @element.present? && element_text.eql?(text)
+    if test_result == @condition
       puts ("#{@@pass_base_str} Verified element text '#{text}'")
     else
       raise "#{@@fail_base_str} Failed to verify element text condition '#{text}. Actual value is #{element_text}'"

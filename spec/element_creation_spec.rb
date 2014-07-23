@@ -1,10 +1,10 @@
 require 'rspec'
 require 'spec_helper'
 require 'page_objects/google_home'
-
-include Corundum::Selenium
+require 'corundum_context'
 
 describe 'Element creation spec' do
+  include_context 'corundum context'
 
   it 'should instantiate new Corundum Elements' do
     puts ('>>> Test should instantiate new Corundum Elements')
@@ -15,7 +15,6 @@ describe 'Element creation spec' do
     puts '>>> Confirming...'
     ele2 = Element.new('ele2', :xpath, "//cite[@class='_td']/b[text()='prototest']")
     ele2.displayed?.should be_true
-    Driver.quit
   end
 
   it 'should use an element from a page object' do
@@ -27,26 +26,19 @@ describe 'Element creation spec' do
     ele = Element.new('ele2', :xpath, "//cite[@class='_td']/b[text()='prototest']")
     puts '>>> Confirming...'
     ele.displayed?.should be_true
-    # puts 'Confirming...'
-    # google_home.lucky_button.displayed?.should be_false
-    Driver.quit
   end
 
   it 'should verify the button element text is correct' do
     Driver.visit('http://www.google.com')
     google_home = GoogleHome.new
     google_home.lucky_button.verify.text("I'm Feeling Lucky")
-
-    Driver.quit
   end
 
   it 'should verify the button element text is NOT correct' do
+    puts ('>>> Test should verify the button element text is NOT correct')
     Driver.visit('http://www.google.com')
     google_home = GoogleHome.new
-
-    google_home.lucky_button.verify.not.text("Going back to back to cali")
-
-    Driver.quit
+    google_home.lucky_button.verify.not.text("I'm not Feeling Lucky...")
   end
 
 end

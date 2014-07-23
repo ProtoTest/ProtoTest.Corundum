@@ -11,9 +11,12 @@ class Corundum::Selenium::Driver  #Corundum driver class wraps around the Seleni
   def self.driver
     unless @@driver
       #listener = NavigationListener.new(logger)
+      browser_type = Corundum::Config::BROWSER
       @@driver = Selenium::WebDriver.for(Corundum::Config::BROWSER) #, :listener => listener)
       @@driver.manage.timeouts.page_load = Corundum::Config::PAGE_TIMEOUT
       @@driver.manage.timeouts.implicit_wait = Corundum::Config::ELEMENT_TIMEOUT
+
+
     end
     @@driver
   end
@@ -28,8 +31,8 @@ class Corundum::Selenium::Driver  #Corundum driver class wraps around the Seleni
   end
 
   def self.quit
-    driver.quit
-    driver = nil
+    @@driver.quit
+    @@driver = nil
   end
 
   def self.go_back
