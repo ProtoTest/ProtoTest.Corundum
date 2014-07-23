@@ -1,12 +1,11 @@
 require 'corundum'
 
 class GoogleHome
-  include Corundum
   attr_reader :search_box, :lucky_button
 
   def initialize
-    @search_box = element(:css, 'input.gbqfif')
-    @lucky_button = element(:css, '#gbqfq')
+    @search_box = Element.new('search box', :css, 'input.gbqfif')
+    @lucky_button = Element.new('lucky button', :css, '#gbqfbb')
   end
 
   def search(text)

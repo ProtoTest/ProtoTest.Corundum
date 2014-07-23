@@ -22,8 +22,8 @@ class Corundum::Selenium::Element
 
   def element
     if @element.nil? or is_stale?
-      wait = Selenium::WebDriver::Wait.new
-      wait.until {@element = @driver.find_element(@by, @locator); @element.displayed?}
+      wait = Selenium::WebDriver::Wait.new :timeout => Corundum::Config::ELEMENT_TIMEOUT
+      wait.until {@element = @driver.find_element(@by, @locator); @element.enabled?}
     end
 
     @element

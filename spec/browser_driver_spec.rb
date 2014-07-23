@@ -1,28 +1,25 @@
 require 'rspec'
 require 'spec_helper'
 
-describe 'Browser driver' do
+describe 'Browser driver spec' do
 
   it 'should launch browser (specified by config) via Corundum Driver' do
-    puts('Test should launch browser (specified by config) via Corundum Driver')
-    ENV['CONFIG_FILE'] ||= 'spec/config.yaml'
-    session = Driver.for($config.browser.intern)
-    session.visit($config.url)
+    puts('>>> Test should launch browser (specified by config) via Corundum Driver')
+    Driver.visit(Corundum::Config::URL)
     sleep(3)
-    session.quit
+    Driver.quit
   end
 
-  it 'should launch browser (specified by test) via Corundum Driver and then test an element' do
-    puts('Test should launch browser (specified by test) via Corundum Driver and then test an element')
-    session = Driver.for(:firefox)
-    session.visit('http://www.google.com')
-    sleep(3)
-    input = session.find_element(:xpath, "//*[@id='gbqfq']")
-    input.click
-    input.send_keys('prototest')
-    sleep(3)
-    session.find_element(:xpath, "//cite[@class='_td']/b[text()='prototest']")
-    session.close
+  it 'should launch browser (specified by test) via Selenium' do
+    site = "https://www.google.com"
+    puts('>>> Test should launch browser (specified by test) via Selenium')
+    Driver.driver = Selenium::WebDriver.for(:firefox)
+    Driver.visit(site)
+    begin
+      raise "Failed to load '#{site}'" if not Driver.current_url.include?(site)
+    ensure
+      Driver.quit
+    end
   end
 
 end

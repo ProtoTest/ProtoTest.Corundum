@@ -14,5 +14,7 @@ class NavigationListener < Selenium::WebDriver::Support::AbstractEventListener
   end
 end
 
-#listener = NavigationListener.new(logger)
-#driver = Selenium::WebDriver.for :firefox, :listener => listener
+# listener = NavigationListener.new(logger)
+# driver = Selenium::WebDriver.for :firefox, :listener => listener
+
+driver.find_element

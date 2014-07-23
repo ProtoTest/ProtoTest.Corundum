@@ -1,4 +1,3 @@
-#require 'uri'
 require 'selenium-webdriver'
 
 module Corundum
@@ -6,21 +5,22 @@ module Corundum
   end
 end
 
-class Corundum::Selenium::Driver < Selenium::WebDriver::Driver  #Corundum driver class wraps around the Selenium Webdriver driver
-
-  DEFAULT_OPTIONS = {:browsers => [{ :browser => :firefox }]}
-
+class Corundum::Selenium::Driver  #Corundum driver class wraps around the Selenium Webdriver driver
   @@driver = nil
-  @@exit_status = nil
-  @@frame_handles = {}
 
   def self.driver
     unless @@driver
-      @@driver = Selenium::WebDriver.for(:firefox)
-      @@driver.manage.timeouts.implicit_wait = 30  # use config
+      #listener = NavigationListener.new(logger)
+      @@driver = Selenium::WebDriver.for(Corundum::Config::BROWSER) #, :listener => listener)
+      @@driver.manage.timeouts.page_load = Corundum::Config::PAGE_TIMEOUT
+      @@driver.manage.timeouts.implicit_wait = Corundum::Config::ELEMENT_TIMEOUT
     end
-
     @@driver
+  end
+
+  def self.driver= driver
+    @@driver.quit if driver
+    @@driver = driver
   end
 
   def self.visit(path)
@@ -29,6 +29,7 @@ class Corundum::Selenium::Driver < Selenium::WebDriver::Driver  #Corundum driver
 
   def self.quit
     driver.quit
+    @@driver = nil
   end
 
   def self.go_back
@@ -87,6 +88,10 @@ class Corundum::Selenium::Driver < Selenium::WebDriver::Driver  #Corundum driver
       retry
     end
 
+  end
+
+  def self.driver= driver
+    @@driver = driver
   end
 
   ##
