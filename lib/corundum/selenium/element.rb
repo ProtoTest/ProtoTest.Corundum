@@ -21,58 +21,130 @@ class Corundum::ElementVerification
   #
   # @param [Corundum::Selenium::Element] element
   # @param [Integer] timeout
-  # @param [Boolean] is_true # TODO: Pick a better goddamn name
-  def initialize(element, timeout, condition=true)
+  # @param [Boolean] not_verification - Whether or not we are 'NOT' verifying something about the element
+  #
+  def initialize(element, timeout, not_verification=false)
     @element = element
     @timeout = timeout
-    @condition = condition
-
+    @not_verification = not_verification
   end
 
   def not
-    ElementVerification.new(@element, @timeout, false)
+    ElementVerification.new(@element, @timeout, true)
   end
 
-  # TODO: Put the NOT verification string in the pass/fail string!å
   def text(text)
+    message = nil
+
+    if @not_verification
+      message = "does not contain text #{text}"
+    else
+      message = "contains text '#{text}'"
+    end
+
     element_text = @element.text
 
-    test_result = @element.present? && element_text.eql?(text)
-    if test_result == @condition
-      puts ("#{@@pass_base_str} Verified element text '#{text}'")
-    else
-      raise "#{@@fail_base_str} Failed to verify element text condition '#{text}. Actual value is #{element_text}'"
+    wait = Selenium::WebDriver::Wait.new :timeout => @timeout
+    wait.until do
+      condition = @element.present? && element_text.eql?(text)
+      if condition != @not_verification
+        log_success(message)
+        return @element
+      end
     end
+
+    # Verification failure
+    message += ". Actual: #{element_text}"
+    log_error(message)
+
+    @element
   end
 
   def visible
+    message = nil
 
+    if @not_verification
+      message = "not visible"
+    else
+      message = "is visible"
+    end
+
+    wait = Selenium::WebDriver::Wait.new :timeout => @timeout
+    wait.until do
+      condition = @element.displayed?
+      if condition != @not_verification
+        log_success(message)
+        return @element
+      end
+    end
+
+    # Verification failure
+    log_error(message)
+
+    @element
   end
 
   def present
+    message = nil
 
+    if @not_verification
+      message = "not present"
+    else
+      message = "is present"
+    end
+
+    wait = Selenium::WebDriver::Wait.new :timeout => @timeout
+    wait.until do
+      condition = @element.present?
+      if condition != @not_verification
+        log_success(message)
+        return @element
+      end
+    end
+
+    # Verification failure
+    log_error(message)
+
+    @element
   end
 
+  # TODO:
   def value(value)
-
+    raise NotImplementedError
   end
 
+  # TODO:
   def selected
-
+    raise NotImplementedError
   end
 
+  # TODO:
   def attribute(attribute, value)
-
+    raise NotImplementedError
   end
 
+  # TODO:
   def css(attribute, value)
-
+    raise NotImplementedError
   end
 
+
+  private
+
+  # TODO: add this to the list of verification errors that will be created at some point
+  def log_error(message)
+    raise "#{@@fail_base_str}#{@element.name}(#{@element.by}=>'#{@element.locator}'): #{message} after #{@timeout} seconds"
+  end
+
+  def log_success(message)
+    puts "#{@@pass_base_str}#{@element.name}(#{@element.by}=>'#{@element.locator}'): #{message}"
+  end
 
 end
 
 class Corundum::Selenium::Element
+
+  attr_reader :name, :by, :locator
 
   def initialize(name, by, locator)
     @name = name
@@ -109,7 +181,19 @@ class Corundum::Selenium::Element
   end
 
   def present?
-    element.enabled?
+    begin
+      return element.enabled?
+    rescue Exception => e
+      return false
+    end
+  end
+
+  def displayed?
+    begin
+      return element.displayed?
+    rescue Exception => e
+      return false
+    end
   end
 
   def clear
@@ -118,10 +202,6 @@ class Corundum::Selenium::Element
 
   def click
     element.click
-  end
-
-  def displayed?
-    element.displayed?
   end
 
   def send_keys(*args)
