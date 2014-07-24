@@ -1,10 +1,5 @@
 require 'selenium-webdriver'
 
-# add human readable name for the element
-class Selenium::WebDriver::Element
-  attr_accessor :name
-end
-
 module Corundum
   module Selenium
   end
@@ -143,7 +138,6 @@ class Corundum::ElementVerification
 end
 
 class Corundum::Selenium::Element
-
   attr_reader :name, :by, :locator
 
   def initialize(name, by, locator)
@@ -158,10 +152,14 @@ class Corundum::Selenium::Element
     @element = nil
   end
 
+  def to_s
+    "'#{@name}' (By:#{@by} => '#{@locator}')"
+  end
+
   def element
     if @element.nil? or is_stale?
       wait = Selenium::WebDriver::Wait.new :timeout => Corundum::Config::ELEMENT_TIMEOUT
-      wait.until {@element = @driver.find_element(@by, @locator); @element.enabled?}
+      wait.until {@element = @driver.find_element(@by, @locator); puts "Finding #{self}"; @element.enabled?}
     end
 
     @element
@@ -201,6 +199,7 @@ class Corundum::Selenium::Element
   end
 
   def click
+    puts "Clicking on #{self}"
     element.click
   end
 

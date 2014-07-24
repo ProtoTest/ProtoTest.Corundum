@@ -1,4 +1,5 @@
 require 'selenium-webdriver'
+require 'event_listener'
 
 module Corundum
   module Selenium
@@ -12,7 +13,7 @@ class Corundum::Selenium::Driver  #Corundum driver class wraps around the Seleni
     unless @@driver
       #listener = NavigationListener.new(logger)
       browser_type = Corundum::Config::BROWSER
-      @@driver = Selenium::WebDriver.for(Corundum::Config::BROWSER) #, :listener => listener)
+      @@driver = Selenium::WebDriver.for(Corundum::Config::BROWSER, :listener => LogDriverEventsListener.new)
       @@driver.manage.timeouts.page_load = Corundum::Config::PAGE_TIMEOUT
       @@driver.manage.timeouts.implicit_wait = Corundum::Config::ELEMENT_TIMEOUT
 

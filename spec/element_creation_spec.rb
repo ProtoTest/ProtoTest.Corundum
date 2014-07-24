@@ -25,6 +25,7 @@ describe 'Element creation spec' do
     puts '>>> Typing...'
     google_home.search('prototest')
     ele = Element.new('ele2', :xpath, "//cite[@class='_td']/b[text()='prototest']")
+    ele.click
     puts '>>> Confirming...'
     ele.displayed?.should be_true
   end
