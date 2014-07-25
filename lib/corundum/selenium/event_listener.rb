@@ -5,7 +5,7 @@ class LogDriverEventsListener
       when :before_navigate_to
         puts "Navigating to url: #{args[1]}"
       when :before_quit
-        puts "Shutting down web driver"
+        puts "Shutting down web driver..."
     end
   end
 end
