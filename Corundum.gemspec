@@ -22,5 +22,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rspec', '2.14.1'
   spec.add_development_dependency 'rspec-expectations', '2.14.5'
   spec.add_development_dependency 'selenium-webdriver', '2.42.0'
+  spec.add_development_dependency 'builder'
 
 end
