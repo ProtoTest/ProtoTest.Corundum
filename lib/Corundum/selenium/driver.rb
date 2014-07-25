@@ -9,15 +9,30 @@ end
 class Corundum::Selenium::Driver  #Corundum driver class wraps around the Selenium Webdriver driver
   @@driver = nil
 
+  def self.reset
+    driver.manage.delete_all_cookies
+    driver.manage.timeouts.page_load = Corundum::Config::PAGE_TIMEOUT
+    driver.manage.timeouts.implicit_wait = Corundum::Config::ELEMENT_TIMEOUT
+
+    # Ensure the browser is maximized to maximize visibility of element
+    # Currently doesn't work with chromedriver
+    driver.manage.window.maximize
+
+    # Chrome Hack to maximize window
+    if @browser_type.eql?(:chrome)
+      width = driver.execute_script("return screen.width;")
+      height = driver.execute_script("return screen.height;")
+      driver.manage.window.move_to(0,0)
+      driver.manage.window.resize_to(width,height)
+    end
+  end
+
   def self.driver
     unless @@driver
       #listener = NavigationListener.new(logger)
-      browser_type = Corundum::Config::BROWSER
+      @browser_type = Corundum::Config::BROWSER
       @@driver = Selenium::WebDriver.for(Corundum::Config::BROWSER, :listener => LogDriverEventsListener.new)
-      @@driver.manage.timeouts.page_load = Corundum::Config::PAGE_TIMEOUT
-      @@driver.manage.timeouts.implicit_wait = Corundum::Config::ELEMENT_TIMEOUT
-
-
+      reset
     end
     @@driver
   end
