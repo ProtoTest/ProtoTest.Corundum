@@ -22,3 +22,10 @@ tmp
 mkmf.log
 .idea/*
 *.iml
+
+# test artifacts
+*.html
+*.log
+*.txt
+*.png
+output.xml
