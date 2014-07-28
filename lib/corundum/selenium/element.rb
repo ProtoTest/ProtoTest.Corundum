@@ -1,141 +1,5 @@
 require 'selenium-webdriver'
-
-module Corundum
-  module Selenium
-  end
-end
-
-include Corundum
-
-
-class Corundum::ElementVerification
-
-  @@fail_base_str = "ELEMENT VERIFICATION ERROR::"
-  @@pass_base_str = "ELEMENT VERIFICATION PASSED::"
-
-  #
-  # @param [Corundum::Selenium::Element] element
-  # @param [Integer] timeout
-  # @param [Boolean] not_verification - Whether or not we are 'NOT' verifying something about the element
-  #
-  def initialize(element, timeout, not_verification=false)
-    @element = element
-    @timeout = timeout
-    @not_verification = not_verification
-  end
-
-  def not
-    ElementVerification.new(@element, @timeout, true)
-  end
-
-  def text(text)
-    message = nil
-
-    if @not_verification
-      message = "does not contain text #{text}"
-    else
-      message = "contains text '#{text}'"
-    end
-
-    element_text = @element.text
-
-    wait = Selenium::WebDriver::Wait.new :timeout => @timeout
-    wait.until do
-      condition = @element.present? && element_text.eql?(text)
-      if condition != @not_verification
-        log_success(message)
-        return @element
-      end
-    end
-
-    # Verification failure
-    message += ". Actual: #{element_text}"
-    log_error(message)
-
-    @element
-  end
-
-  def visible
-    message = nil
-
-    if @not_verification
-      message = "not visible"
-    else
-      message = "is visible"
-    end
-
-    wait = Selenium::WebDriver::Wait.new :timeout => @timeout
-    wait.until do
-      condition = @element.displayed?
-      if condition != @not_verification
-        log_success(message)
-        return @element
-      end
-    end
-
-    # Verification failure
-    log_error(message)
-
-    @element
-  end
-
-  def present
-    message = nil
-
-    if @not_verification
-      message = "not present"
-    else
-      message = "is present"
-    end
-
-    wait = Selenium::WebDriver::Wait.new :timeout => @timeout
-    wait.until do
-      condition = @element.present?
-      if condition != @not_verification
-        log_success(message)
-        return @element
-      end
-    end
-
-    # Verification failure
-    log_error(message)
-
-    @element
-  end
-
-  # TODO:
-  def value(value)
-    raise NotImplementedError
-  end
-
-  # TODO:
-  def selected
-    raise NotImplementedError
-  end
-
-  # TODO:
-  def attribute(attribute, value)
-    raise NotImplementedError
-  end
-
-  # TODO:
-  def css(attribute, value)
-    raise NotImplementedError
-  end
-
-
-  private
-
-  # TODO: add this to the list of verification errors that will be created at some point
-  def log_error(message)
-    raise "#{@@fail_base_str}#{@element.name}(#{@element.by}=>'#{@element.locator}'): #{message} after #{@timeout} seconds"
-  end
-
-  def log_success(message)
-    puts "#{@@pass_base_str}#{@element.name}(#{@element.by}=>'#{@element.locator}'): #{message}"
-  end
-
-end
+require 'element_verification'
 
 class Corundum::Selenium::Element
   attr_reader :name, :by, :locator
@@ -169,9 +33,16 @@ class Corundum::Selenium::Element
     @element = e
   end
 
-  def verify(timeout=0)
-    timeout = Corundum::Config::ELEMENT_TIMEOUT if timeout.eql?(0)
+  # soft failure, will not kill test immediately
+  def verify(timeout=nil)
+    timeout = Corundum::Config::ELEMENT_TIMEOUT if timeout.nil?
     ElementVerification.new(self, timeout)
+  end
+
+  # hard failure, will kill test immediately
+  def wait_until(timeout=nil)
+    timeout = Corundum::Config::ELEMENT_TIMEOUT if timeout.nil?
+    ElementVerification.new(self, timeout, fail_test=true)
   end
 
   def attribute(name)
