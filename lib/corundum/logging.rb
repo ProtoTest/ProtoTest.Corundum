@@ -1,10 +1,9 @@
-# require 'logger'
-#
-# # Logging class - allows for display and recording of diagnostic information
-#
-# class Logging
-#   include Corundum
-#
+require 'logger'
+
+# Logging class - allows for display and recording of diagnostic information
+
+class Logging
+
 # #    logger.level = Logger::WARN
 #
 # def initialize
@@ -17,21 +16,31 @@
 #     "<#{datetime}>: #{msg}\n"
 #   end
 # end
-#
-#   def debug(text)
-#     Logger.log(text)
-#     #logger.debug(text)
-#     #puts ("#{timestamp} --> #{text}")
-#   end
-#
-#   def info(text)
-#     timestamp = Time.now.strftime("[%Y-%m-%d %H:%M:%S]")
-#     puts ("#{timestamp}     #{text}")
-#   end
-#
-#   def error(text)
-#     timestamp = Time.now.strftime("[%Y-%m-%d %H:%M:%S]")
-#     puts ("#{timestamp} [X] #{text}")
-#   end
-#
-# end
+
+  @@time_format = "[%Y-%m-%d %H:%M:%S]"
+
+    def debug(text)
+      timestamp = Time.now.strftime(@@time_format)
+      #Logger.add(text)
+      puts ("#{timestamp} >>> #{text}")
+    end
+
+    def info(text)
+      timestamp = Time.now.strftime(@@time_format)
+      #Logger.info(text)
+      puts ("#{timestamp}     #{text}")
+    end
+
+    def warn(text)
+      timestamp = Time.now.strftime(@@time_format)
+      #Logger.warn(text)
+      puts ("#{timestamp} [W] #{text}")
+    end
+
+    def error(text)
+      timestamp = Time.now.strftime(@@time_format)
+      #Logger.error(text)
+      puts ("#{timestamp} [E] #{text}")
+    end
+
+end

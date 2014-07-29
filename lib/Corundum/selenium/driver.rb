@@ -71,6 +71,17 @@ class Corundum::Selenium::Driver  #Corundum driver class wraps around the Seleni
     driver.current_url
   end
 
+  def self.current_domain
+    site_url = driver.current_url.to_s
+    domain = site_url.match(/(https?:\/\/)?(\S*\.)?([\w\d]*\.\w+)\/?/i)[3]
+    if (!domain.nil?)
+      puts ("Current domain is: (#{domain}).")
+      return domain
+    else
+      puts ('ERROR: Unable to parse URL.')
+    end
+  end
+
   def self.execute_script(script)
     driver.execute_script script
   end

@@ -44,9 +44,11 @@ RSpec.configure do |config|
     # TODO: Create some test_data container to store all of this stuff related to the test run, then throw the verification errors in the HTML report
 
     # just a simple print to console
-    puts "VERIFICATION ERRORS:"
-    $verification_errors.each do |error|
-      puts "-- #{error.error}"
+    if !$verification_errors.empty?
+      puts "VERIFICATION ERRORS:"
+      $verification_errors.each do |error|
+        puts "-- #{error.error}"
+      end
     end
   end
 
