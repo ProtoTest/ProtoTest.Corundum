@@ -1,3 +1,5 @@
+require 'verification_error'
+
 module Corundum
   module Selenium
   end
@@ -137,11 +139,12 @@ class Corundum::ElementVerification
 
   private
 
-  # TODO: add this to the list of verification errors that will be created at some point
+  # TODO: store the verification errors global in some test_data container
   def log_error(message)
     error = "#{@@fail_base_str}#{@element.name}(#{@element.by}=>'#{@element.locator}'): #{message} after #{@timeout} seconds"
+    $verification_errors << VerificationError.new(error, take_screenshot=true)
     if @fail_test
-      raise error
+      fail(error)
     else
       puts error
     end

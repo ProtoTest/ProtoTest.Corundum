@@ -79,7 +79,7 @@ class Corundum::Selenium::Driver  #Corundum driver class wraps around the Seleni
     driver.execute_script "return #{script}"
   end
 
-  def self.save_screenshot(path, options={})
+  def self.save_screenshot(path)
     driver.save_screenshot(path)
   end
 

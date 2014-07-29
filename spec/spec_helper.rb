@@ -16,7 +16,7 @@ RSpec.configure do |config|
   Dir.mkdir(report_root_dir) if not File.exist?(report_root_dir)
 
   # Create the sub-directory for the test run
-  current_run_report_dir = File.join(report_root_dir, DateTime.now.strftime("%m-%d-%Y_%H_%M_%S"))
+  REPORT_DIR = current_run_report_dir = File.join(report_root_dir, DateTime.now.strftime("%m-%d-%Y_%H_%M_%S"))
   Dir.mkdir(current_run_report_dir)
 
   # allow it so rspec test cases do not need to have values associated with tagging
@@ -37,11 +37,17 @@ RSpec.configure do |config|
   end
 
   config.before(:each) do
-
+    $verification_errors = []
   end
 
   config.after(:each) do
+    # TODO: Create some test_data container to store all of this stuff related to the test run, then throw the verification errors in the HTML report
 
+    # just a simple print to console
+    puts "VERIFICATION ERRORS:"
+    $verification_errors.each do |error|
+      puts "-- #{error.error}"
+    end
   end
 
 end
