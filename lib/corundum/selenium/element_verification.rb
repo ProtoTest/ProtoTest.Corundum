@@ -43,6 +43,7 @@ class Corundum::ElementVerification
         $log.debug("Confirming text (#{text}) is within element...")
         condition = @element.present? && element_text.eql?(text)
         if condition != @not_verification
+          Corundum::DriverExtensions.highlight(@element) if Corundum::Config::HIGHLIGHT_VERIFICATIONS
           $log.debug("Verified: '#{@element.name}' (By:(#{@element.by} => '#{@element.locator}')) #{pass_message}.")
           return @element
         end
@@ -73,6 +74,7 @@ class Corundum::ElementVerification
       wait.until do
         condition = @element.displayed?
         if condition != @not_verification
+          Corundum::DriverExtensions.highlight(@element) if Corundum::Config::HIGHLIGHT_VERIFICATIONS
           $log.debug("Verified: '#{@element.name}' (By:(#{@element.by} => '#{@element.locator}')) #{pass_message}.")
           return @element
         end
@@ -102,6 +104,7 @@ class Corundum::ElementVerification
       wait.until do
         condition = @element.present?
         if condition != @not_verification
+          Corundum::DriverExtensions.highlight(@element) if Corundum::Config::HIGHLIGHT_VERIFICATIONS
           $log.debug("Verified: '#{@element.name}' (By:(#{@element.by} => '#{@element.locator}')) #{pass_message}.")
           return @element
         end

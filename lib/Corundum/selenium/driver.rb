@@ -91,8 +91,8 @@ class Corundum::Selenium::Driver  #Corundum driver class wraps around the Seleni
     $log.debug("Confirmed. (#{url}) includes (#{domain}).")
   end
 
-  def self.execute_script(script)
-    driver.execute_script script
+  def self.execute_script(script, element)
+    driver.execute_script(script, element)
   end
 
   def self.evaluate_script(script)

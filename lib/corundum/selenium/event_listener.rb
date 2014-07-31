@@ -1,7 +1,8 @@
 # require 'corundum'
 #
-# class LogDriverEventsListener
-#   def call *args
+# class DriverEventsListener
+#
+#   def call (*args)
 #     # only need to deal with the hooks you are interested in
 #     case args.first
 #       when :before_navigate_to
@@ -10,6 +11,5 @@
 #         $log.debug("Shutting down web driver...")
 #     end
 #   end
-# end
 #
-# Selenium::WebDriver::Element
+# end

@@ -37,8 +37,8 @@ class Logging
       timestamp = Time.now.strftime(@@time_format)
       #Logger.warn(text)
       puts ("#{timestamp} [W] #{text}")
-      capture_screenshot
-      warn("WARNING: #{text}")
+      # capture_screenshot
+      warn("\nWARNING: #{text}")
     end
 
     def error(text)
