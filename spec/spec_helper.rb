@@ -16,7 +16,7 @@ RSpec.configure do |config|
   Dir.mkdir(report_root_dir) if not File.exist?(report_root_dir)
 
   # Create the sub-directory for the test run
-  REPORT_DIR = current_run_report_dir = File.join(report_root_dir, DateTime.now.strftime("%m-%d-%Y_%H_%M_%S"))
+  REPORT_DIR = current_run_report_dir = File.join(report_root_dir, DateTime.now.strftime("%m-%d-%Y %H_%M_%S"))
   Dir.mkdir(current_run_report_dir)
 
   # allow it so rspec test cases do not need to have values associated with tagging
@@ -37,19 +37,29 @@ RSpec.configure do |config|
   end
 
   config.before(:each) do
+    puts('')
+    $log.message('BEGINNING NEW TEST')
     $verification_errors = []
   end
 
   config.after(:each) do
     # TODO: Create some test_data container to store all of this stuff related to the test run, then throw the verification errors in the HTML report
 
+    $log.message('Executing test cleanup...')
+    if !Driver.nil?
+      Corundum::Selenium::Driver.quit
+    end
+
     # just a simple print to console
     if !$verification_errors.empty?
-      puts "VERIFICATION ERRORS:"
+      "VERIFICATION ERRORS:"
       $verification_errors.each do |error|
-        puts "-- #{error.error}"
+        $log.error(error.error)
       end
     end
+
+    $log.message('TEST COMPLETE')
+
   end
 
 end

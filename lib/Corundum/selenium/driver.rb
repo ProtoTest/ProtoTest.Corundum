@@ -1,5 +1,5 @@
 require 'selenium-webdriver'
-require 'event_listener'
+# require 'event_listener'
 
 module Corundum
   module Selenium
@@ -31,7 +31,7 @@ class Corundum::Selenium::Driver  #Corundum driver class wraps around the Seleni
     unless @@driver
       #listener = NavigationListener.new(logger)
       @browser_type = Corundum::Config::BROWSER
-      @@driver = Selenium::WebDriver.for(Corundum::Config::BROWSER, :listener => LogDriverEventsListener.new)
+      @@driver = Selenium::WebDriver.for(Corundum::Config::BROWSER) #, :listener => LogDriverEventsListener.new)
       reset
     end
     @@driver
@@ -43,10 +43,12 @@ class Corundum::Selenium::Driver  #Corundum driver class wraps around the Seleni
   end
 
   def self.visit(path)
+    $log.debug("Navigating to url: (#{path}).")
     driver.navigate.to(path)
   end
 
   def self.quit
+    $log.debug('Shutting down web driver...')
     @@driver.quit
     @@driver = nil
   end
@@ -75,11 +77,18 @@ class Corundum::Selenium::Driver  #Corundum driver class wraps around the Seleni
     site_url = driver.current_url.to_s
     domain = site_url.match(/(https?:\/\/)?(\S*\.)?([\w\d]*\.\w+)\/?/i)[3]
     if (!domain.nil?)
-      puts ("Current domain is: (#{domain}).")
+      $log.debug("Current domain is: (#{domain}).")
       return domain
     else
-      puts ('ERROR: Unable to parse URL.')
+      $log.error('ERROR: Unable to parse URL.')
     end
+  end
+
+  def self.verify_url(url)
+    $log.debug('Verifying URL...')
+    domain = self.current_domain.to_s
+    url.include?(domain)
+    $log.debug("Confirmed. (#{url}) includes (#{domain}).")
   end
 
   def self.execute_script(script)
@@ -118,10 +127,6 @@ class Corundum::Selenium::Driver  #Corundum driver class wraps around the Seleni
       retry
     end
 
-  end
-
-  def self.driver= driver
-    @@driver = driver
   end
 
   ##

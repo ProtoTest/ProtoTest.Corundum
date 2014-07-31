@@ -1,4 +1,3 @@
-require 'verification_error'
 
 module Corundum
   module Selenium
@@ -7,11 +6,7 @@ end
 
 include Corundum
 
-
 class Corundum::ElementVerification
-
-  @@fail_base_str = "ELEMENT VERIFICATION ERROR::"
-  @@pass_base_str = "ELEMENT VERIFICATION PASSED::"
 
   #
   # @param [Corundum::Selenium::Element] element
@@ -19,7 +14,7 @@ class Corundum::ElementVerification
   # @param [Boolean] not_verification - Whether or not we are 'NOT' verifying something about the element
   #
   def initialize(element, timeout, fail_test=false, not_verification=false)
-    @element = element
+    @element = element # Corundum::Element
     @timeout = timeout
     @not_verification = not_verification
     @fail_test = fail_test
@@ -30,12 +25,14 @@ class Corundum::ElementVerification
   end
 
   def text(text)
-    message = nil
+    not_message = nil
+    pass_message = nil
 
     if @not_verification
-      message = "does not contain text '#{text}'"
+      not_message = "does not contain text (#{text})"
     else
-      message = "contains text '#{text}'"
+      not_message = "Element should contain (#{text})"
+      pass_message = "contains text (#{text})"
     end
 
     element_text = @element.text
@@ -43,9 +40,10 @@ class Corundum::ElementVerification
     wait = Selenium::WebDriver::Wait.new :timeout => @timeout, :interval => 1
     begin
       wait.until do
+        $log.debug("Confirming text (#{text}) is within element...")
         condition = @element.present? && element_text.eql?(text)
         if condition != @not_verification
-          log_success(message)
+          $log.debug("Verified: '#{@element.name}' (By:(#{@element.by} => '#{@element.locator}')) #{pass_message}.")
           return @element
         end
       end
@@ -54,19 +52,20 @@ class Corundum::ElementVerification
     end
 
     # Verification failure
-    message += ". Actual: '#{element_text}'"
-    log_error(message)
+    log_issue("#{not_message}. Actual text is: (#{element_text}).")
 
     @element
   end
 
   def visible
-    message = nil
+    not_message = nil
+    pass_message = nil
 
     if @not_verification
-      message = "not visible"
+      not_message = "Element is not visible."
     else
-      message = "is visible"
+      not_message = "Element should be visible."
+      pass_message = "is visible"
     end
 
     wait = Selenium::WebDriver::Wait.new :timeout => @timeout, :interval => 1
@@ -74,7 +73,7 @@ class Corundum::ElementVerification
       wait.until do
         condition = @element.displayed?
         if condition != @not_verification
-          log_success(message)
+          $log.debug("Verified: '#{@element.name}' (By:(#{@element.by} => '#{@element.locator}')) #{pass_message}.")
           return @element
         end
       end
@@ -83,18 +82,19 @@ class Corundum::ElementVerification
     end
 
     # Verification failure
-    log_error(message)
+    log_issue(not_message)
 
     @element
   end
 
   def present
-    message = nil
+    pass_message = nil
 
     if @not_verification
-      message = "not present"
+      not_message = "Element is not present."
     else
-      message = "is present"
+      not_message = "Element should be present."
+      pass_message = "is present"
     end
 
     wait = Selenium::WebDriver::Wait.new :timeout => @timeout, :interval => 1
@@ -102,7 +102,7 @@ class Corundum::ElementVerification
       wait.until do
         condition = @element.present?
         if condition != @not_verification
-          log_success(message)
+          $log.debug("Verified: '#{@element.name}' (By:(#{@element.by} => '#{@element.locator}')) #{pass_message}.")
           return @element
         end
       end
@@ -111,7 +111,7 @@ class Corundum::ElementVerification
     end
 
     # Verification failure
-    log_error(message)
+    log_issue(not_message)
 
     @element
   end
@@ -140,18 +140,18 @@ class Corundum::ElementVerification
   private
 
   # TODO: store the verification errors global in some test_data container
-  def log_error(message)
-    error = "#{@@fail_base_str}#{@element.name}(#{@element.by}=>'#{@element.locator}'): #{message} after #{@timeout} seconds"
-    $verification_errors << VerificationError.new(error, take_screenshot=true)
+  def log_issue(message)
+    # error = "#{@@fail_base_str}#{@element.name}(#{@element.by}=>'#{@element.locator}'): #{message} after #{@timeout} seconds"
+    # $verification_errors << VerificationError.new(error, take_screenshot=true)
     if @fail_test
-      fail(error)
+      $log.fail(message)
     else
-      puts error
+      $log.warning(message)
     end
   end
 
   def log_success(message)
-    puts "#{@@pass_base_str}#{@element.name}(#{@element.by}=>'#{@element.locator}'): #{message}"
+    $log.debug("#{@@pass_base_str}#{@element.name}(#{@element.by}=>'#{@element.locator}'): #{message}")
   end
 
 end

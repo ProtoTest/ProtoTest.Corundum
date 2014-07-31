@@ -22,10 +22,9 @@ class Corundum::Selenium::Element
 
   def element
     if @element.nil? or is_stale?
-      wait = Selenium::WebDriver::Wait.new :timeout => Corundum::Config::ELEMENT_TIMEOUT
-      wait.until {@element = @driver.find_element(@by, @locator); puts "Finding #{self}"; @element.enabled?}
+      wait = Selenium::WebDriver::Wait.new :timeout => Corundum::Config::ELEMENT_TIMEOUT, :interval => 1
+      wait.until {@element = @driver.find_element(@by, @locator); $log.debug("Finding element #{self}..."); @element.enabled?}
     end
-
     @element
   end
 
@@ -35,12 +34,14 @@ class Corundum::Selenium::Element
 
   # soft failure, will not kill test immediately
   def verify(timeout=nil)
+    $log.debug('Verifying element...')
     timeout = Corundum::Config::ELEMENT_TIMEOUT if timeout.nil?
     ElementVerification.new(self, timeout)
   end
 
   # hard failure, will kill test immediately
   def wait_until(timeout=nil)
+    $log.debug('Waiting for element...')
     timeout = Corundum::Config::ELEMENT_TIMEOUT if timeout.nil?
     ElementVerification.new(self, timeout, fail_test=true)
   end
@@ -70,11 +71,12 @@ class Corundum::Selenium::Element
   end
 
   def click
-    puts "Clicking on #{self}"
+    $log.debug("Clicking on #{self}")
     element.click
   end
 
   def send_keys(*args)
+    $log.debug("Typing: #{args} into element: (#{self}).")
     element.send_keys *args
   end
 
@@ -103,7 +105,6 @@ class Corundum::Selenium::Element
   end
 
   def text= text
-    element.clear
     element.send_keys text
   end
 
@@ -116,6 +117,7 @@ class Corundum::Selenium::Element
   # @return [Element] element
   #
   def find_element(by, locator)
+    $log.debug('Finding element...')
     element.find_element(by, locator)
   end
 
@@ -132,7 +134,7 @@ class Corundum::Selenium::Element
   end
 
   def method_missing(method_sym, *arguments, &block)
-    puts("called #{method_sym} on element #{@locator} by #{@by_type}")
+    $log.debug("called #{method_sym} on element #{@locator} by #{@by_type}")
     if @element.respond_to?(method_sym)
       @element.method(method_sym).call(*arguments, &block)
     else
@@ -144,7 +146,7 @@ class Corundum::Selenium::Element
 
   def is_stale?
     begin
-      @element.enabled
+      @element.enabled?
       return false
     rescue Exception => e
       return true

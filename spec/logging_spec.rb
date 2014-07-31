@@ -5,16 +5,17 @@ require 'corundum_context'
 describe 'Corundum logging spec' do
   include_context 'corundum context'
 
-  it 'should print each of the log statements' do
-    site = Corundum::Config::URL #pulls from framework config
-    Driver.visit(site) #Driver pulls from framework config
-    $log.debug('DEBUG example.')
+  it 'Test 001 should use each of the logging types' do
+    $log.info(example.description)
+    $log.debug('Debug example text.')
     sleep 1
-    $log.info('INFO example.')
+    $log.info('Info example text.')
     sleep 1
-    $log.warn('INFO example.')
+    $log.warning('Warning example text.')
     sleep 1
-    $log.error('ERROR example.')
+    expect {$log.error('Error example text.')}.to raise_error
+    sleep 1
+    $log.capture_screenshot
   end
 
 end
