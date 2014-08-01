@@ -19,4 +19,9 @@ class Corundum::DriverExtensions
     Driver.execute_script("arguments[0].style.backgroundColor='" + original_background + "'; return;", element.element)
   end
 
+  def self.scroll_to(element)
+    $log.debug("Scrolling element into view...")
+    Driver.execute_script("arguments[0].scrollIntoView(); return;", element.element)
+  end
+
 end

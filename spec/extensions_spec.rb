@@ -21,4 +21,11 @@ describe 'Driver extensions spec' do
     google_home.lucky_button.verify.visible
   end
 
+  it 'Test 002 should scroll an element into view' do
+    $log.info(example.description)
+    Driver.visit('http://www.prototest.com')
+    copyright_bar = Element.new('Copyright bar', :xpath, "//p[@class='copyright']")
+    copyright_bar.scroll_into_view
+  end
+
 end

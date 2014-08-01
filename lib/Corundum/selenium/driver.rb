@@ -80,15 +80,18 @@ class Corundum::Selenium::Driver  #Corundum driver class wraps around the Seleni
       $log.debug("Current domain is: (#{domain}).")
       return domain
     else
-      $log.error('ERROR: Unable to parse URL.')
+      $log.error("Unable to parse URL.")
     end
   end
 
   def self.verify_url(url)
     $log.debug('Verifying URL...')
     domain = self.current_domain.to_s
-    url.include?(domain)
-    $log.debug("Confirmed. (#{url}) includes (#{domain}).")
+    if url.include?(domain)
+      $log.debug("Confirmed. (#{url}) includes (#{domain}).")
+    else
+      $log.error("(#{url}) does not include (#{domain}).")
+    end
   end
 
   def self.execute_script(script, element)

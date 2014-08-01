@@ -86,6 +86,10 @@ class Corundum::Selenium::Element
     element.location
   end
 
+  def scroll_into_view
+    DriverExtensions.scroll_to(self)
+  end
+
   def size
     element.size
   end
