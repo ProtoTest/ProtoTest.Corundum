@@ -72,11 +72,13 @@ class Corundum::Selenium::Element
 
   def click
     $log.debug("Clicking on #{self}")
+    DriverExtensions.highlight(self) if Corundum::Config::HIGHLIGHT_VERIFICATIONS
     element.click
   end
 
   def send_keys(*args)
     $log.debug("Typing: #{args} into element: (#{self}).")
+    DriverExtensions.highlight(self) if Corundum::Config::HIGHLIGHT_VERIFICATIONS
     element.send_keys *args
   end
 

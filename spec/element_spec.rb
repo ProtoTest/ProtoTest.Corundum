@@ -2,6 +2,7 @@ require 'rspec'
 require 'rspec-expectations'
 require 'spec_helper'
 require 'page_objects/google_home'
+require 'page_objects/gmail_home'
 require 'corundum_context'
 
 describe 'Element spec' do
@@ -105,6 +106,15 @@ describe 'Element spec' do
     $log.info(example.description)
     Driver.visit('http://www.google.com')
     Element.new('Random element', :css, '#no_id').verify.visible
+  end
+
+  it 'Test 015 should click on a page object element and confirm transition to new page object' do
+    $log.info(example.description)
+    Driver.visit('http://www.google.com')
+    google_home = GoogleHome.new
+    google_home.gmail_option.click
+    gmail_home = GmailHome.new
+    gmail_home.nav_gmail_icon.wait_until.present
   end
 
 end

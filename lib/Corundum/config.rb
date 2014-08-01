@@ -6,6 +6,6 @@ module Corundum
     ELEMENT_TIMEOUT = 15
     #LOG_LEVEL = 'DEBUG'
     HIGHLIGHT_VERIFICATIONS = true
-    HIGHLIGHT_DURATION = 0.050
+    HIGHLIGHT_DURATION = 0.100
   end
 end
