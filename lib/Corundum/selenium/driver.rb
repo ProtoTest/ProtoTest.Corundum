@@ -43,12 +43,12 @@ class Corundum::Selenium::Driver  #Corundum driver class wraps around the Seleni
   end
 
   def self.visit(path)
-    $log.debug("Navigating to url: (#{path}).")
+    Log.debug("Navigating to url: (#{path}).")
     driver.navigate.to(path)
   end
 
   def self.quit
-    $log.debug('Shutting down web driver...')
+    Log.debug('Shutting down web driver...')
     @@driver.quit
     @@driver = nil
   end
@@ -77,20 +77,20 @@ class Corundum::Selenium::Driver  #Corundum driver class wraps around the Seleni
     site_url = driver.current_url.to_s
     domain = site_url.match(/(https?:\/\/)?(\S*\.)?([\w\d]*\.\w+)\/?/i)[3]
     if (!domain.nil?)
-      $log.debug("Current domain is: (#{domain}).")
+      Log.debug("Current domain is: (#{domain}).")
       return domain
     else
-      $log.error("Unable to parse URL.")
+      Log.error("Unable to parse URL.")
     end
   end
 
   def self.verify_url(url)
-    $log.debug('Verifying URL...')
+    Log.debug('Verifying URL...')
     domain = self.current_domain.to_s
     if url.include?(domain)
-      $log.debug("Confirmed. (#{url}) includes (#{domain}).")
+      Log.debug("Confirmed. (#{url}) includes (#{domain}).")
     else
-      $log.error("(#{url}) does not include (#{domain}).")
+      Log.error("(#{url}) does not include (#{domain}).")
     end
   end
 

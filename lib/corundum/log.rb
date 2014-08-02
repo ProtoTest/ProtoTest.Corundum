@@ -4,13 +4,13 @@ require 'chunky_png'
 
 # Logging class - allows for display and recording of diagnostic information
 
-class Logging
+class Log
 
 # #    logger.level = Logger::WARN
 #
 # def initialize
-#     $log_file = File.open(ARGV[3], File::WRONLY | File::APPEND | File::CREAT)
-#     $logger.attach($log_file)
+#     Log_file = File.open(ARGV[3], File::WRONLY | File::APPEND | File::CREAT)
+#     Logger.attach(Log_file)
 #
 #   logger.level = CorundumConfig.
 #   logger.datetime_format = '%Y-%m-%d %H:%M:%S'
@@ -22,19 +22,19 @@ class Logging
   @@time_format = "[%Y-%m-%d %H:%M:%S]"
   @@screenshot_path = nil
 
-  def debug(text)
+  def self.debug(text)
     timestamp = Time.now.strftime(@@time_format)
     #Logger.add(text)
     puts ("#{timestamp} --> #{text}")
   end
 
-  def info(text)
+  def self.info(text)
     timestamp = Time.now.strftime(@@time_format)
     #Logger.info(text)
     puts ("#{timestamp}     #{text}")
   end
 
-  def warning(text)
+  def self.warning(text)
     timestamp = Time.now.strftime(@@time_format)
     #Logger.warn(text)
     puts ("#{timestamp} [W] #{text}")
@@ -42,7 +42,7 @@ class Logging
     warn("\nWARNING: #{text}")
   end
 
-  def error(text)
+  def self.error(text)
     timestamp = Time.now.strftime(@@time_format)
     #Logger.error(text)
     puts ("#{timestamp} [E] #{text}")
@@ -50,20 +50,20 @@ class Logging
     fail("ERROR: #{text}")
   end
 
-  def message(text)
+  def self.message(text)
     timestamp = Time.now.strftime(@@time_format)
     #Logger.message(text)
     puts ("#{timestamp} --- #{text}")
   end
 
-  def capture_screenshot
+  def self.capture_screenshot
     debug ("Capturing screenshot of browser...")
     timestamp = Time.now.strftime("%Y_%m_%d__%H_%M_%S")
     screenshot_path = File.join(REPORT_DIR, "#{timestamp}.png")
     Driver.save_screenshot(screenshot_path)
   end
 
-  def capture_element(element)
+  def self.capture_element(element)
     debug ("Capturing screenshot of element...")
     element.scroll_into_view
 

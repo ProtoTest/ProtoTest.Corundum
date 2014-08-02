@@ -38,14 +38,14 @@ RSpec.configure do |config|
 
   config.before(:each) do
     puts('')
-    $log.message('BEGINNING NEW TEST')
+    Log.message('BEGINNING NEW TEST')
     $verification_errors = []
   end
 
   config.after(:each) do
     # TODO: Create some test_data container to store all of this stuff related to the test run, then throw the verification errors in the HTML report
 
-    $log.message('Executing test cleanup...')
+    Log.message('Executing test cleanup...')
     if !Driver.nil?
       Corundum::Selenium::Driver.quit
     end
@@ -54,11 +54,11 @@ RSpec.configure do |config|
     if !$verification_errors.empty?
       "VERIFICATION ERRORS:"
       $verification_errors.each do |error|
-        $log.error(error.error)
+        Log.error(error.error)
       end
     end
 
-    $log.message('TEST COMPLETE')
+    Log.message('TEST COMPLETE')
 
   end
 

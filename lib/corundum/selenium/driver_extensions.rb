@@ -9,7 +9,7 @@ include Corundum
 class Corundum::DriverExtensions
 
   def self.highlight(element)
-    $log.debug("Highlighting element...")
+    Log.debug("Highlighting element...")
     original_border = Driver.execute_script("return arguments[0].style.border", element.element)
     original_background = Driver.execute_script("return arguments[0].style.backgroundColor", element.element)
     Driver.execute_script("arguments[0].style.border='3px solid lime'; return;", element.element)
@@ -20,7 +20,7 @@ class Corundum::DriverExtensions
   end
 
   def self.scroll_to(element)
-    $log.debug("Scrolling element into view...")
+    Log.debug("Scrolling element into view...")
     Driver.execute_script("arguments[0].scrollIntoView(); return;", element.element)
   end
 

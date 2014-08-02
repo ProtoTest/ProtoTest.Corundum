@@ -40,11 +40,11 @@ class Corundum::ElementVerification
     wait = Selenium::WebDriver::Wait.new :timeout => @timeout, :interval => 1
     begin
       wait.until do
-        $log.debug("Confirming text (#{text}) is within element...")
+        Log.debug("Confirming text (#{text}) is within element...")
         condition = @element.present? && element_text.eql?(text)
         if condition != @not_verification
           Corundum::DriverExtensions.highlight(@element) if Corundum::Config::HIGHLIGHT_VERIFICATIONS
-          $log.debug("Verified: '#{@element.name}' (By:(#{@element.by} => '#{@element.locator}')) #{pass_message}.")
+          Log.debug("Verified: '#{@element.name}' (By:(#{@element.by} => '#{@element.locator}')) #{pass_message}.")
           return @element
         end
       end
@@ -75,7 +75,7 @@ class Corundum::ElementVerification
         condition = @element.displayed?
         if condition != @not_verification
           Corundum::DriverExtensions.highlight(@element) if Corundum::Config::HIGHLIGHT_VERIFICATIONS
-          $log.debug("Verified: '#{@element.name}' (By:(#{@element.by} => '#{@element.locator}')) #{pass_message}.")
+          Log.debug("Verified: '#{@element.name}' (By:(#{@element.by} => '#{@element.locator}')) #{pass_message}.")
           return @element
         end
       end
@@ -105,7 +105,7 @@ class Corundum::ElementVerification
         condition = @element.present?
         if condition != @not_verification
           Corundum::DriverExtensions.highlight(@element) if Corundum::Config::HIGHLIGHT_VERIFICATIONS
-          $log.debug("Verified: '#{@element.name}' (By:(#{@element.by} => '#{@element.locator}')) #{pass_message}.")
+          Log.debug("Verified: '#{@element.name}' (By:(#{@element.by} => '#{@element.locator}')) #{pass_message}.")
           return @element
         end
       end
@@ -147,14 +147,14 @@ class Corundum::ElementVerification
     # error = "#{@@fail_base_str}#{@element.name}(#{@element.by}=>'#{@element.locator}'): #{message} after #{@timeout} seconds"
     # $verification_errors << VerificationError.new(error, take_screenshot=true)
     if @fail_test
-      $log.fail(message)
+      Log.fail(message)
     else
-      $log.warning(message)
+      Log.warning(message)
     end
   end
 
   def log_success(message)
-    $log.debug("#{@@pass_base_str}#{@element.name}(#{@element.by}=>'#{@element.locator}'): #{message}")
+    Log.debug("#{@@pass_base_str}#{@element.name}(#{@element.by}=>'#{@element.locator}'): #{message}")
   end
 
 end

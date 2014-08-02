@@ -5,7 +5,7 @@ class CustomFormatter < RSpec::Core::Formatters::HtmlFormatter
   def extra_failure_content(failure)
     @html = '<table border="1">'
     @html << '<th>Verification Failures</th>'
-    #$logger.log.each { |x| @html << '<tr><td style="color:' + x.color + '">' + x.text + '</td></tr>'  }
+    #Logger.log.each { |x| @html << '<tr><td style="color:' + x.color + '">' + x.text + '</td></tr>'  }
     $verification_errors.each do |error|
       @html << "<tr><td>#{error.error}</td></tr>"
       @html << "<tr><td><div style='width: 800px'><img  src='#{error.screenshot_path}'/></div></td></tr>"

@@ -16,7 +16,7 @@ class GoogleHome
   end
 
   def search(text)
-    $log.info("Searching for #{text} using Google search field...")
+    Log.info("Searching for #{text} using Google search field...")
     @search_box.send_keys(text)
   end
 
