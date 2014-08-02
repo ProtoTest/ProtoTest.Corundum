@@ -2,7 +2,6 @@ require 'rspec'
 require 'spec_helper'
 require 'corundum_context'
 
-
 describe 'Browser driver spec' do
   include_context 'corundum context'
 

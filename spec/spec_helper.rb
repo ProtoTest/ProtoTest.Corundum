@@ -12,11 +12,11 @@ require 'junit_reporter'
 RSpec.configure do |config|
 
   # Create the test report root directory
-  report_root_dir = File.expand_path(File.join(File.dirname(__FILE__), 'reports'))
+  REPORT_ROOT = report_root_dir = File.expand_path(File.join(File.dirname(__FILE__), 'reports'))
   Dir.mkdir(report_root_dir) if not File.exist?(report_root_dir)
 
   # Create the sub-directory for the test run
-  REPORT_DIR = current_run_report_dir = File.join(report_root_dir, DateTime.now.strftime("%m-%d-%Y %H_%M_%S"))
+  REPORT_DIR = current_run_report_dir = File.join(report_root_dir, DateTime.now.strftime("%m_%d_%Y__%H_%M_%S"))
   Dir.mkdir(current_run_report_dir)
 
   # allow it so rspec test cases do not need to have values associated with tagging
