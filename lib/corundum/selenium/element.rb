@@ -1,5 +1,5 @@
 require 'selenium-webdriver'
-require 'element_verification'
+require 'corundum/selenium/element_verification'
 
 class Corundum::Selenium::Element
   attr_reader :name, :by, :locator

@@ -6,11 +6,6 @@ require 'date'
 require 'fileutils'
 include Corundum::Selenium
 
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib/corundum'))
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib/corundum/driver'))
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib/corundum/selenium'))
-
 shared_context 'corundum context' do
   include Corundum
 
