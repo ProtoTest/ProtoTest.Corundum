@@ -1,5 +1,6 @@
 module Corundum
   module Config
+    REPORTS_OUTPUT = $reports_output || (Dir.home.to_s + "/desktop")
     BROWSER = $browser || :firefox
     URL = $url || 'www.google.com'
     PAGE_TIMEOUT = $page_timeout || 30

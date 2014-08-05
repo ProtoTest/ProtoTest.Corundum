@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'Corundum logging spec' do
-  include_context 'corundum context'
+  include_context 'corundum'
 
   it 'Test 001 should use each of the logging statements' do
     Log.info(example.description)

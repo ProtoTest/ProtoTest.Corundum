@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'Corundum Driver extensions spec' do
-  include_context 'corundum context'
+  include_context 'corundum'
 
   it 'Test 001 should highlight elements on test execution' do
     Log.info(example.description)

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'Browser driver spec' do
-  include_context 'corundum context'
+  include_context 'corundum'
 
   test_url = "http://prototest.com"
   test_driver = Driver

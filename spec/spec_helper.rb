@@ -1,6 +1,7 @@
 # Add any spec enhancements or extra features here
 
 # Config Options
+# $reports_output =
 $browser = :firefox
 $url = 'http://www.google.com'
 $page_timeout = 30
@@ -12,7 +13,7 @@ $highlight_duration = 0.100
 # Rspec Components
 require 'rspec'
 require 'rspec-expectations'
-require 'corundum_context'
+require 'corundum'
 
 # Page Objects
 require 'page_objects/google_home'

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'Corundum Element spec' do
-  include_context 'corundum context'
+  include_context 'corundum'
 
   it 'Test 001 should instantiate new Corundum Elements' do
     Log.info(example.description)
