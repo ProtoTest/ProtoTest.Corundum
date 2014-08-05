@@ -149,7 +149,7 @@ class Corundum::ElementVerification
     if @fail_test
       Log.fail(message)
     else
-      Log.warning(message)
+      Log.warn(message)
     end
   end
 

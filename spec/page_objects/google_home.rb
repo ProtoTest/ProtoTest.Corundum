@@ -9,7 +9,7 @@ class GoogleHome
     @images_option = Element.new('Images option', :xpath, "//a[@class='gb_d' and @data-pid='2']")
     @apps_option = Element.new('Apps option', :xpath, "//a[@title='Apps']")
     @signin_button = Element.new('Sign in option', :xpath, "//a[@id='gb_70']")
-    @google_logo = Element.new('Google logo', :xpath, "//div[@id='hplogo']")
+    @google_logo = Element.new('Google logo', :xpath, "//*[@id='hplogo']")
     @search_box = Element.new('Search box', :css, 'input.gbqfif')
     @search_button = Element.new('Search button', :css, '#gbqfba')
     @lucky_button = Element.new('Lucky button', :css, '#gbqfbb')

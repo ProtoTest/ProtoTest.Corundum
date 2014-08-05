@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'corundum_context'
 
 describe 'Corundum Element spec' do
   include_context 'corundum context'

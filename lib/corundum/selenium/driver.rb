@@ -1,5 +1,4 @@
 require 'selenium-webdriver'
-# require 'event_listener'
 
 module Corundum
   module Selenium
@@ -29,7 +28,6 @@ class Corundum::Selenium::Driver #Corundum driver class wraps around the Seleniu
 
   def self.driver
     unless @@driver
-      #listener = NavigationListener.new(logger)
       @browser_type = Corundum::Config::BROWSER
       @@driver = Selenium::WebDriver.for(Corundum::Config::BROWSER) #, :listener => LogDriverEventsListener.new)
       reset
@@ -38,7 +36,7 @@ class Corundum::Selenium::Driver #Corundum driver class wraps around the Seleniu
   end
 
   def self.driver= driver
-    @@driver.quit if driver
+    @@driver.quit if @@driver
     @@driver = driver
   end
 
@@ -48,8 +46,8 @@ class Corundum::Selenium::Driver #Corundum driver class wraps around the Seleniu
   end
 
   def self.quit
-    Log.debug('Shutting down web driver...')
-    unless @@driver.nil?
+    if @@driver
+      Log.debug('Shutting down web driver...')
       @@driver.quit
       @@driver = nil
     end
@@ -107,7 +105,7 @@ class Corundum::Selenium::Driver #Corundum driver class wraps around the Seleniu
   def self.save_screenshot
     Log.debug ("Capturing screenshot of browser...")
     timestamp = Time.now.strftime("%Y_%m_%d__%H_%M_%S")
-    screenshot_path = File.join(REPORT_DIR, "#{timestamp}.png")
+    screenshot_path = File.join(Corundum::Config::REPORT_DIR, "#{timestamp}.png")
     driver.save_screenshot(screenshot_path)
   end
 

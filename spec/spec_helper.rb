@@ -3,6 +3,7 @@
 # Rspec Components
 require 'rspec'
 require 'rspec-expectations'
+require 'corundum_context'
 
 # Page Objects
 require 'page_objects/google_home'

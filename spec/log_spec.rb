@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'corundum_context'
 
 describe 'Corundum logging spec' do
   include_context 'corundum context'
@@ -11,9 +10,9 @@ describe 'Corundum logging spec' do
     sleep 1
     Log.info('Info example text.')
     sleep 1
-    Log.warning('Warning example text.')
+    Log.warn('Warning example text.')
     sleep 1
-    expect {Log.error('Error example text.')}.to raise_error
+    Log.error('Error example text.')
     sleep 1
   end
 

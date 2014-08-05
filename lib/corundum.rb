@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib/corundum/driver'
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib/corundum/selenium'))
 
 require 'config'
-require 'log'
+require 'logging'
 require 'junit_reporter'
 require 'custom_formatter'
 
