@@ -1,6 +1,6 @@
 module Corundum
   module Config
-    REPORTS_OUTPUT = $reports_output || (Dir.home.to_s + "/desktop")
+    REPORTS_OUTPUT = $reports_output || Dir.home
     BROWSER = $browser || :firefox
     URL = $url || 'www.google.com'
     PAGE_TIMEOUT = $page_timeout || 30
@@ -15,8 +15,8 @@ module Corundum
     # @param [Symbol] constant - the constant to define within config. Ensure to use a Symbol and uppercase name
     # @param [Type]  value - the value to give the constant
     #
-    def self.add_config_value(constant, value)
-      self.const_set(constant, value) if !const_defined?(constant)
+    def self.add_update_config_value(constant, value)
+      self.const_set(constant, value)
     end
 
   end

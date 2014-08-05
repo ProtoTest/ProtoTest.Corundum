@@ -39,6 +39,7 @@ class Logger
 end # class logger
 
 # Singleton Logger class
+
 class Corundum::Logging
   @@logger = nil
 

@@ -1,7 +1,7 @@
 # Add any spec enhancements or extra features here
 
 # Config Options
-# $reports_output =
+$reports_output = (Dir.home.to_s + "/desktop")
 $browser = :firefox
 $url = 'http://www.google.com'
 $page_timeout = 30
