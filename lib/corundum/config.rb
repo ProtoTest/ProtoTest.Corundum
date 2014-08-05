@@ -1,12 +1,12 @@
 module Corundum
   module Config
-    BROWSER = :firefox
-    URL = 'http://www.google.com'
-    PAGE_TIMEOUT = 30
-    ELEMENT_TIMEOUT = 15
-    LOG_LEVEL = :debug
-    HIGHLIGHT_VERIFICATIONS = true
-    HIGHLIGHT_DURATION = 0.100
+    BROWSER = $browser || :firefox
+    URL = $url || 'www.google.com'
+    PAGE_TIMEOUT = $page_timeout || 30
+    ELEMENT_TIMEOUT = $element_timeout || 15
+    LOG_LEVEL = $log_level || :info
+    HIGHLIGHT_VERIFICATIONS = $highlight_verifications
+    HIGHLIGHT_DURATION = $highlight_duration || 0.100
 
     #
     # Add a Constant to the Config class

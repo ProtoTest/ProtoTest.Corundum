@@ -103,7 +103,13 @@ describe 'Corundum Element spec' do
     Element.new('Random element', :css, '#no_id').verify.visible
   end
 
-  it 'Test 015 should click on a page object element and confirm transition to new page object' do
+  it 'Test 015 should give an error when verifying a non-existent element is on the page using a (WAIT_UNTIL) verification' do
+    Log.info(example.description)
+    Driver.visit('http://www.google.com')
+    expect {Element.new('Random element', :css, '#no_id').wait_until.visible}.to raise_error
+  end
+
+  it 'Test 016 should click on a page object element and confirm transition to new page object' do
     Log.info(example.description)
     Driver.visit('http://www.google.com')
     google_home = GoogleHome.new
