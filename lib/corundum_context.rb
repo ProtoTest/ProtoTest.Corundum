@@ -8,7 +8,6 @@ include Corundum::Selenium
 
 shared_context 'corundum context' do
   include Corundum
-
 end
 
 # Logger object
@@ -43,7 +42,6 @@ RSpec.configure do |config|
   end
 
   config.after(:all) do
-    Corundum::Logging::close
   end
 
   config.before(:each) do
@@ -59,7 +57,6 @@ RSpec.configure do |config|
     Corundum::Selenium::Driver.quit
 
     Log.info('TEST COMPLETE')
-
   end
 
 end

@@ -55,21 +55,19 @@ class Corundum::Logging
 # FATAL = 4
 # an unknown message that should always be logged
 # UNKNOWN = 5
+
   def self.log
     unless @@logger
       initialize_logger
     end
-
     @@logger
   end
 
   def self.add_device device
     @@devices ||= []
-
     unless @@logger
       initialize_logger
     end
-
     @@logger.attach(device)
     @@devices << device
   end
@@ -77,10 +75,7 @@ class Corundum::Logging
   def self.close
     @@devices.each {|dev| @@logger.detach(dev)}
     @@devices.clear
-
     @@logger.close if @@logger
-
-    puts "Testing"
   end
 
   private
@@ -102,7 +97,16 @@ class Corundum::Logging
       @@logger.level = level
 
       @@logger.formatter = proc do |severity, datetime, progname, msg|
-        "[#{datetime.strftime('%Y-%m-%d %H:%M:%S')}][#{severity}]: #{msg}\n"
+        sev = severity.to_s
+        if sev.eql?("DEBUG")
+          "[#{datetime.strftime('%Y-%m-%d %H:%M:%S')}][#{severity}]   #{msg}\n"
+        elsif sev.eql?("INFO")
+          "[#{datetime.strftime('%Y-%m-%d %H:%M:%S')}][#{severity}]  > #{msg}\n"
+        elsif sev.eql?("WARN")
+          "[#{datetime.strftime('%Y-%m-%d %H:%M:%S')}][#{severity}]  - #{msg}\n"
+        else
+          "[#{datetime.strftime('%Y-%m-%d %H:%M:%S')}][#{severity}] - #{msg}\n"
+        end
       end
     end
   end
