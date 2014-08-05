@@ -1,9 +1,7 @@
-require 'rspec'
 require 'spec_helper'
 require 'corundum_context'
-require 'page_objects/google_home'
 
-describe 'Driver extensions spec' do
+describe 'Corundum Driver extensions spec' do
   include_context 'corundum context'
 
   it 'Test 001 should highlight elements on test execution' do
@@ -26,6 +24,7 @@ describe 'Driver extensions spec' do
     Driver.visit('http://www.prototest.com')
     copyright_bar = Element.new('Copyright bar', :xpath, "//p[@class='copyright']")
     copyright_bar.scroll_into_view
+    copyright_bar.verify.visible
   end
 
 end

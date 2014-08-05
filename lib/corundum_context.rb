@@ -46,9 +46,7 @@ RSpec.configure do |config|
     # TODO: Create some test_data container to store all of this stuff related to the test run, then throw the verification errors in the HTML report
 
     Log.message('Executing test cleanup...')
-    if !Driver.nil?
-      Corundum::Selenium::Driver.quit
-    end
+    Corundum::Selenium::Driver.quit
 
     Log.message('TEST COMPLETE')
 

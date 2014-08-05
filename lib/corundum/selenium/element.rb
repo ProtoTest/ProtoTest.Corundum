@@ -1,5 +1,6 @@
 require 'selenium-webdriver'
 require 'corundum/selenium/element_verification'
+require 'chunky_png'
 
 class Corundum::Selenium::Element
   attr_reader :name, :by, :locator
@@ -87,6 +88,7 @@ class Corundum::Selenium::Element
   end
 
   def scroll_into_view
+    self.verify.present
     DriverExtensions.scroll_to(self)
   end
 
@@ -137,6 +139,26 @@ class Corundum::Selenium::Element
   #
   def find_elements(by, locator)
     element.find_elements(by, locator)
+  end
+
+  def save_element_screenshot
+    Log.debug ("Capturing screenshot of element...")
+    self.scroll_into_view
+
+    timestamp = Time.now.strftime("%Y_%m_%d__%H_%M_%S")
+    name = self.name.gsub(' ', '_')
+    screenshot_path = File.join(REPORT_DIR, "#{name}__#{timestamp}.png")
+    @driver.save_screenshot(screenshot_path)
+
+    location_x = self.location.x
+    location_y = self.location.y
+    element_width = self.size.width
+    element_height = self.size.height
+
+    image = ChunkyPNG::Image.from_file(screenshot_path.to_s)
+    image1 = image.crop(location_x, location_y, element_width, element_height)
+    image2 = image1.to_image
+    image2.save("#{REPORT_DIR}\\#{name}__#{timestamp}.png")
   end
 
   def method_missing(method_sym, *arguments, &block)

@@ -1,4 +1,3 @@
-require 'rspec'
 require 'spec_helper'
 require 'corundum_context'
 

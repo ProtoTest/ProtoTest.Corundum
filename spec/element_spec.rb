@@ -1,11 +1,7 @@
-require 'rspec'
-require 'rspec-expectations'
 require 'spec_helper'
-require 'page_objects/google_home'
-require 'page_objects/gmail_home'
 require 'corundum_context'
 
-describe 'Element spec' do
+describe 'Corundum Element spec' do
   include_context 'corundum context'
 
   it 'Test 001 should instantiate new Corundum Elements' do

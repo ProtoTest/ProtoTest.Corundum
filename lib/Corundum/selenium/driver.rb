@@ -6,7 +6,7 @@ module Corundum
   end
 end
 
-class Corundum::Selenium::Driver  #Corundum driver class wraps around the Selenium Webdriver driver
+class Corundum::Selenium::Driver #Corundum driver class wraps around the Selenium Webdriver driver
   @@driver = nil
 
   def self.reset
@@ -22,8 +22,8 @@ class Corundum::Selenium::Driver  #Corundum driver class wraps around the Seleni
     if @browser_type.eql?(:chrome)
       width = driver.execute_script("return screen.width;")
       height = driver.execute_script("return screen.height;")
-      driver.manage.window.move_to(0,0)
-      driver.manage.window.resize_to(width,height)
+      driver.manage.window.move_to(0, 0)
+      driver.manage.window.resize_to(width, height)
     end
   end
 
@@ -49,8 +49,10 @@ class Corundum::Selenium::Driver  #Corundum driver class wraps around the Seleni
 
   def self.quit
     Log.debug('Shutting down web driver...')
-    @@driver.quit
-    @@driver = nil
+    unless @@driver.nil?
+      @@driver.quit
+      @@driver = nil
+    end
   end
 
   def self.go_back
@@ -102,8 +104,11 @@ class Corundum::Selenium::Driver  #Corundum driver class wraps around the Seleni
     driver.execute_script "return #{script}"
   end
 
-  def self.save_screenshot(path)
-    driver.save_screenshot(path)
+  def self.save_screenshot
+    Log.debug ("Capturing screenshot of browser...")
+    timestamp = Time.now.strftime("%Y_%m_%d__%H_%M_%S")
+    screenshot_path = File.join(REPORT_DIR, "#{timestamp}.png")
+    driver.save_screenshot(screenshot_path)
   end
 
   def self.reset!

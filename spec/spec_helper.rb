@@ -1,6 +1,9 @@
-# $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
-# $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib/corundum'))
-# $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib/corundum/driver'))
-# $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib/corundum/selenium'))
+# Add any spec enhancements or extra features here
 
-# Framework components can be found in corundum_context
+# Rspec Components
+require 'rspec'
+require 'rspec-expectations'
+
+# Page Objects
+require 'page_objects/google_home'
+require 'page_objects/gmail_home'
