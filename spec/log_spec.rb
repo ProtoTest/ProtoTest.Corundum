@@ -4,7 +4,6 @@ describe 'Corundum logging spec' do
   include_context 'corundum'
 
   it 'Test 001 should use each of the logging statements' do
-    Log.info(example.description)
     sleep 1
     Log.debug('Debug example text.')
     sleep 1
@@ -17,7 +16,6 @@ describe 'Corundum logging spec' do
   end
 
   it 'Test 002 should use each of the screenshot captures' do
-    Log.info(example.description)
     Driver.visit('http://www.google.com')
     Driver.save_screenshot
     google_home = GoogleHome.new

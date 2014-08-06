@@ -4,7 +4,6 @@ describe 'Corundum Element spec' do
   include_context 'corundum'
 
   it 'Test 001 should instantiate new Corundum Elements' do
-    Log.info(example.description)
     Driver.visit('http://www.google.com')
     ele1 = Element.new('ele1', :css, '#gbqfq')
     ele1.send_keys 'prototest'
@@ -13,7 +12,6 @@ describe 'Corundum Element spec' do
   end
 
   it 'Test 002 should use an element from a page object' do
-    Log.info(example.description)
     Driver.visit('http://www.google.com')
     google_home = GoogleHome.new
     google_home.search('prototest')
@@ -22,21 +20,18 @@ describe 'Corundum Element spec' do
   end
 
   it 'Test 003 should verify a button element text is correct' do
-    Log.info(example.description)
     Driver.visit('http://www.google.com')
     google_home = GoogleHome.new
     google_home.lucky_button.verify.text("I'm Feeling Lucky")
   end
 
   it 'Test 004 should verify the button element text is NOT correct' do
-    Log.info(example.description)
     Driver.visit('http://www.google.com')
     google_home = GoogleHome.new
     google_home.lucky_button.verify.not.text("I'm not Feeling Lucky!")
   end
 
   it 'Test 005 should give a warning when verifying the button element text is NOT correct' do
-    Log.info(example.description)
     Driver.visit('http://www.google.com')
     google_home = GoogleHome.new
     google_home.lucky_button.verify.text("I'm not Feeling Lucky!")
@@ -44,7 +39,6 @@ describe 'Corundum Element spec' do
   end
 
   it 'Test 006 should give a warning when verifying the button element text is correct despite using a (NOT) verification' do
-    Log.info(example.description)
     Driver.visit('http://www.google.com')
     google_home = GoogleHome.new
     google_home.lucky_button.verify.not.text("I'm Feeling Lucky")
@@ -52,65 +46,55 @@ describe 'Corundum Element spec' do
   end
 
   it 'Test 007 should verify the button element is present' do
-    Log.info(example.description)
     Driver.visit('http://www.google.com')
     google_home = GoogleHome.new
     google_home.lucky_button.verify.present
   end
 
   it 'Test 008 should verify an element not on the page is (NOT) present' do
-    Log.info(example.description)
     Driver.visit('http://www.google.com')
     Element.new('Random element', :css, '#no_id').verify.not.present
   end
 
   it 'Test 009 should verify the button element is visible' do
-    Log.info(example.description)
     Driver.visit('http://www.google.com')
     google_home = GoogleHome.new
     google_home.lucky_button.verify.visible
   end
 
   it 'Test 010 should verify an element not on the page is (NOT) visible' do
-    Log.info(example.description)
     Driver.visit('http://www.google.com')
     Element.new('Random element', :css, '#no_id').verify.not.visible
   end
 
   it 'Test 011 should give a warning when verifying a button element is on the page when using a (NOT PRESENT) verification' do
-    Log.info(example.description)
     Driver.visit('http://www.google.com')
     google_home = GoogleHome.new
     google_home.lucky_button.verify.not.present
   end
 
   it 'Test 012 should give a warning when verifying a button element is on the page when using a (NOT VISIBLE) verification' do
-    Log.info(example.description)
     Driver.visit('http://www.google.com')
     google_home = GoogleHome.new
     google_home.lucky_button.verify.not.visible
   end
 
   it 'Test 013 should give a warning when verifying a non-existent element is on the page using a (PRESENT) verification' do
-    Log.info(example.description)
     Driver.visit('http://www.google.com')
     Element.new('Random element', :css, '#no_id').verify.present
   end
 
   it 'Test 014 should give a warning when verifying a non-existent element is on the page using a (VISIBLE) verification' do
-    Log.info(example.description)
     Driver.visit('http://www.google.com')
     Element.new('Random element', :css, '#no_id').verify.visible
   end
 
   it 'Test 015 should give an error when verifying a non-existent element is on the page using a (WAIT_UNTIL) verification' do
-    Log.info(example.description)
     Driver.visit('http://www.google.com')
     expect {Element.new('Random element', :css, '#no_id').wait_until.visible}.to raise_error
   end
 
   it 'Test 016 should click on a page object element and confirm transition to new page object' do
-    Log.info(example.description)
     Driver.visit('http://www.google.com')
     google_home = GoogleHome.new
     google_home.gmail_option.click

@@ -25,6 +25,7 @@ shared_context 'corundum' do
   include Corundum
 
   before(:all) do
+    Log.info("BEGINNING TEST SUITE")
     if $target_ip
       Log.info("TARGET MACHINE: #{$target_ip}")
     else
@@ -33,11 +34,13 @@ shared_context 'corundum' do
   end
 
   after(:all) do
+    puts ("\n")
+    Log.info("TEST SUITE COMPLETE")
   end
 
   before(:each) do
     puts ("\n")
-    Log.info('BEGINNING NEW TEST')
+    Log.info("BEGINNING NEW TEST: #{example.description}")
     $verification_errors = []
   end
 

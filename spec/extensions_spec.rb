@@ -4,7 +4,6 @@ describe 'Corundum Driver extensions spec' do
   include_context 'corundum'
 
   it 'Test 001 should highlight elements on test execution' do
-    Log.info(example.description)
     Driver.visit('http://www.google.com')
     google_home = GoogleHome.new
     google_home.plus_you.verify.visible
@@ -19,7 +18,6 @@ describe 'Corundum Driver extensions spec' do
   end
 
   it 'Test 002 should scroll an element into view' do
-    Log.info(example.description)
     Driver.visit('http://www.prototest.com')
     copyright_bar = Element.new('Copyright bar', :xpath, "//p[@class='copyright']")
     copyright_bar.scroll_into_view
