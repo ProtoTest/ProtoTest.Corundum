@@ -1,3 +1,5 @@
+# Logger class wraps around ruby 'logger' gem to provide diagnostic and workflow information
+
 require 'logger'
 
 # Add in multiple device logging directly into Logger class

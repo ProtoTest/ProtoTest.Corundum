@@ -1,3 +1,5 @@
+# Config class provides configuration hooks for tests to control aspects of runtime settings
+
 module Corundum
   module Config
     REPORTS_OUTPUT = $reports_output || Dir.home

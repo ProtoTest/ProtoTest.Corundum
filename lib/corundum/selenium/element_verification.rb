@@ -1,3 +1,5 @@
+# Element Verifications class provides the actual confirmation of elements within a web page
+# Test formatting: element.verify.[NOT].[PRESENT]
 
 module Corundum
   module Selenium
@@ -43,7 +45,7 @@ class Corundum::ElementVerification
         Log.debug("Confirming text (#{text}) is within element...")
         condition = @element.present? && element_text.eql?(text)
         if condition != @not_verification
-          Corundum::DriverExtensions.highlight(@element) if Corundum::Config::HIGHLIGHT_VERIFICATIONS
+          Corundum::ElementExtensions.highlight(@element) if Corundum::Config::HIGHLIGHT_VERIFICATIONS
           Log.debug("Verified: '#{@element.name}' (By:(#{@element.by} => '#{@element.locator}')) #{pass_message}.")
           return @element
         end
@@ -74,7 +76,7 @@ class Corundum::ElementVerification
       wait.until do
         condition = @element.displayed?
         if condition != @not_verification
-          Corundum::DriverExtensions.highlight(@element) if Corundum::Config::HIGHLIGHT_VERIFICATIONS
+          Corundum::ElementExtensions.highlight(@element) if Corundum::Config::HIGHLIGHT_VERIFICATIONS
           Log.debug("Verified: '#{@element.name}' (By:(#{@element.by} => '#{@element.locator}')) #{pass_message}.")
           return @element
         end
@@ -104,7 +106,7 @@ class Corundum::ElementVerification
       wait.until do
         condition = @element.present?
         if condition != @not_verification
-          Corundum::DriverExtensions.highlight(@element) if Corundum::Config::HIGHLIGHT_VERIFICATIONS
+          Corundum::ElementExtensions.highlight(@element) if Corundum::Config::HIGHLIGHT_VERIFICATIONS
           Log.debug("Verified: '#{@element.name}' (By:(#{@element.by} => '#{@element.locator}')) #{pass_message}.")
           return @element
         end

@@ -1,3 +1,6 @@
+# Driver class wraps around the Selenium Webdriver driver, slightly expanding functionality in some areas
+# Test formatting: [DRIVER].[VISIT](url)
+
 require 'selenium-webdriver'
 
 module Corundum
@@ -5,7 +8,7 @@ module Corundum
   end
 end
 
-class Corundum::Selenium::Driver #Corundum driver class wraps around the Selenium Webdriver driver
+class Corundum::Selenium::Driver
   @@driver = nil
 
   def self.reset

@@ -1,3 +1,5 @@
+# Element Extensions class expands specific driver commands to provide advanced functionality for Elements
+# Test formatting of element: element.verify.present   Element class usage: ElementExtensions.highlight(self)
 
 module Corundum
   module Selenium
@@ -6,7 +8,7 @@ end
 
 include Corundum
 
-class Corundum::DriverExtensions
+class Corundum::ElementExtensions
 
   def self.highlight(element)
     Log.debug("Highlighting element...")

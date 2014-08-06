@@ -1,3 +1,5 @@
+# Corundum core file allows a single point of access to all framework-related components
+
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib/corundum'))
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib/corundum/selenium'))
@@ -8,8 +10,8 @@ require 'junit_reporter'
 require 'custom_formatter'
 
 require 'driver'
-require 'driver_extensions'
 require 'element'
+require 'element_extensions'
 require 'element_verification'
 require 'event_listener'
 

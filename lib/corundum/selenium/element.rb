@@ -1,3 +1,6 @@
+# Element class wraps around the Selenium driver's element (driver.find_element) functionality
+# Test formatting: [ELEMENT].[VERIFY].not.present
+
 require 'selenium-webdriver'
 require 'corundum/selenium/element_verification'
 require 'chunky_png'
@@ -73,13 +76,13 @@ class Corundum::Selenium::Element
 
   def click
     Log.debug("Clicking on #{self}")
-    DriverExtensions.highlight(self) if Corundum::Config::HIGHLIGHT_VERIFICATIONS
+    ElementExtensions.highlight(self) if Corundum::Config::HIGHLIGHT_VERIFICATIONS
     element.click
   end
 
   def send_keys(*args)
     Log.debug("Typing: #{args} into element: (#{self}).")
-    DriverExtensions.highlight(self) if Corundum::Config::HIGHLIGHT_VERIFICATIONS
+    ElementExtensions.highlight(self) if Corundum::Config::HIGHLIGHT_VERIFICATIONS
     element.send_keys *args
   end
 
@@ -89,7 +92,7 @@ class Corundum::Selenium::Element
 
   def scroll_into_view
     self.verify.present
-    DriverExtensions.scroll_to(self)
+    ElementExtensions.scroll_to(self)
   end
 
   def size
