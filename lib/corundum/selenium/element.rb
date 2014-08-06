@@ -147,7 +147,7 @@ class Corundum::Selenium::Element
 
     timestamp = Time.now.strftime("%Y_%m_%d__%H_%M_%S")
     name = self.name.gsub(' ', '_')
-    screenshot_path = File.join(Corundum::Config::REPORT_DIR, "#{name}__#{timestamp}.png")
+    screenshot_path = File.join($current_run_dir, "#{name}__#{timestamp}.png")
     @driver.save_screenshot(screenshot_path)
 
     location_x = self.location.x
@@ -158,7 +158,7 @@ class Corundum::Selenium::Element
     image = ChunkyPNG::Image.from_file(screenshot_path.to_s)
     image1 = image.crop(location_x, location_y, element_width, element_height)
     image2 = image1.to_image
-    image2.save(File.join(Corundum::Config::REPORT_DIR, "#{name}__#{timestamp}.png"))
+    image2.save(File.join($current_run_dir, "#{name}__#{timestamp}.png"))
   end
 
   def method_missing(method_sym, *arguments, &block)

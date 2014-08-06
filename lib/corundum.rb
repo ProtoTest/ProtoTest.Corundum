@@ -53,10 +53,11 @@ Dir.mkdir(report_root_dir) if not File.exist?(report_root_dir)
 
 # Create the sub-directory for the test suite run
 current_run_report_dir = File.join(report_root_dir, "spec_results__" + DateTime.now.strftime("%m_%d_%Y__%H_%M_%S"))
+$current_run_dir = current_run_report_dir
 Dir.mkdir(current_run_report_dir)
 
 # Add the output log file for the rspec test run to the logger
-Corundum::Logging::add_device(File.open(File.join(current_run_report_dir, "suite.log"), File::WRONLY | File::APPEND | File::CREAT))
+Corundum::Logging::add_device(File.open(File.join(current_run_report_dir, "spec_logging_output.log"), File::WRONLY | File::APPEND | File::CREAT))
 
 
 RSpec.configure do |config|
@@ -66,9 +67,9 @@ RSpec.configure do |config|
   # Allow it so rspec test cases do not need to have values associated with tagging
   config.treat_symbols_as_metadata_keys_with_true_values = true
 
-  config.add_formatter :documentation, File.join(current_run_report_dir, 'output.txt')
-  config.add_formatter CustomFormatter, File.join(current_run_report_dir, 'output.html')
-  config.add_formatter JunitReporter, File.join(current_run_report_dir, 'output.xml')
+  config.add_formatter :documentation, File.join(current_run_report_dir, 'spec_execution_notes.txt')
+  config.add_formatter CustomFormatter, File.join(current_run_report_dir, 'spec_results_report.html')
+  config.add_formatter JunitReporter, File.join(current_run_report_dir, 'spec_execution_stats.xml')
 
   config.add_setting :test_name, :default => 'Test'
 

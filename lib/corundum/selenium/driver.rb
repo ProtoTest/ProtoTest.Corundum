@@ -110,7 +110,7 @@ class Corundum::Selenium::Driver #Corundum driver class wraps around the Seleniu
   def self.save_screenshot
     Log.debug ("Capturing screenshot of browser...")
     timestamp = Time.now.strftime("%Y_%m_%d__%H_%M_%S")
-    screenshot_path = File.join(Corundum::Config::REPORT_DIR, "#{timestamp}.png")
+    screenshot_path = File.join($current_run_dir, "screenshot__#{timestamp}.png")
     driver.save_screenshot(screenshot_path)
   end
 

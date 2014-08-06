@@ -6,7 +6,7 @@ $browser = :firefox
 $url = 'http://www.google.com'
 $page_timeout = 30
 $element_timeout = 15
-$log_level = :info
+$log_level = :debug
 $highlight_verifications = true
 $highlight_duration = 0.100
 
