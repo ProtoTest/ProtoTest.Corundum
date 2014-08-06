@@ -23,7 +23,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rspec-expectations', '2.14.5'
   spec.add_development_dependency 'selenium-webdriver', '2.42.0'
   spec.add_development_dependency 'builder'
-  spec.add_development_dependency 'chunky_png'
   spec.add_development_dependency 'oily_png'
 
 end

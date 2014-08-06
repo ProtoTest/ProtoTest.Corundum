@@ -158,6 +158,7 @@ class Corundum::Selenium::Element
     element_width = self.size.width
     element_height = self.size.height
 
+    # ChunkyPNG commands tap into oily_png (performance-enhanced version of chunky_png)
     image = ChunkyPNG::Image.from_file(screenshot_path.to_s)
     image1 = image.crop(location_x, location_y, element_width, element_height)
     image2 = image1.to_image
