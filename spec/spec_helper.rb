@@ -16,5 +16,4 @@ require 'rspec-expectations'
 require 'corundum'
 
 # Page Objects
-require 'page_objects/google_home'
-require 'page_objects/gmail_home'
+require 'page_objects/spec_page_objects_list'
