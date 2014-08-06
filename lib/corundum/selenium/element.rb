@@ -3,7 +3,7 @@
 
 require 'selenium-webdriver'
 require 'corundum/selenium/element_verification'
-require 'chunky_png'
+require 'oily_png'
 
 class Corundum::Selenium::Element
   attr_reader :name, :by, :locator

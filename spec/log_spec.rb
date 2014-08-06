@@ -16,7 +16,7 @@ describe 'Corundum logging spec' do
     sleep 1
   end
 
-  it 'Test 002 should use each of the logging captures' do
+  it 'Test 002 should use each of the screenshot captures' do
     Log.info(example.description)
     Driver.visit('http://www.google.com')
     Driver.save_screenshot
