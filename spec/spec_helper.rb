@@ -2,6 +2,7 @@
 
 # Config Options
 $reports_output = (Dir.home.to_s + "/desktop")
+$target_ip = 'localhost'
 $browser = :firefox
 $url = 'http://www.google.com'
 $page_timeout = 30

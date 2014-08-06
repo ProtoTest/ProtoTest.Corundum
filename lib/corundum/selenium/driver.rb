@@ -32,8 +32,11 @@ class Corundum::Selenium::Driver
   def self.driver
     unless @@driver
       @browser_type = Corundum::Config::BROWSER
-      @@driver = Selenium::WebDriver.for(Corundum::Config::BROWSER) #, :listener => LogDriverEventsListener.new)
-      reset
+      if $target_ip && (!$target_ip.eql?('localhost'))
+        @@driver = Selenium::WebDriver.for(:remote, :url => "http://#{$target_ip}:4444/wd/hub", :desired_capabilities => Corundum::Config::BROWSER)
+      else
+        @@driver = Selenium::WebDriver.for(Corundum::Config::BROWSER) #, :listener => LogDriverEventsListener.new)
+      end
     end
     @@driver
   end

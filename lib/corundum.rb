@@ -25,6 +25,11 @@ shared_context 'corundum' do
   include Corundum
 
   before(:all) do
+    if $target_ip
+      Log.info("TARGET MACHINE: #{$target_ip}")
+    else
+      Log.info("TARGET MACHINE: localhost")
+    end
   end
 
   after(:all) do

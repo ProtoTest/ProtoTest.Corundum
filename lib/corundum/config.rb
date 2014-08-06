@@ -3,6 +3,7 @@
 module Corundum
   module Config
     REPORTS_OUTPUT = $reports_output || Dir.home
+    TARGET_IP = $target_ip || 'localhost'
     BROWSER = $browser || :firefox
     URL = $url || 'www.google.com'
     PAGE_TIMEOUT = $page_timeout || 30
