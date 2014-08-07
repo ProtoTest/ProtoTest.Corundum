@@ -17,15 +17,14 @@ class Corundum::Selenium::Driver
     driver.manage.timeouts.implicit_wait = Corundum::Config::ELEMENT_TIMEOUT
 
     # Ensure the browser is maximized to maximize visibility of element
-    # Currently doesn't work with chromedriver
-    driver.manage.window.maximize
-
-    # Chrome Hack to maximize window
+    # Currently doesn't work with chromedriver, but the following workaround does:
     if @browser_type.eql?(:chrome)
       width = driver.execute_script("return screen.width;")
       height = driver.execute_script("return screen.height;")
       driver.manage.window.move_to(0, 0)
       driver.manage.window.resize_to(width, height)
+    else
+      driver.manage.window.maximize
     end
   end
 
@@ -37,6 +36,7 @@ class Corundum::Selenium::Driver
       else
         @@driver = Selenium::WebDriver.for(Corundum::Config::BROWSER) #, :listener => LogDriverEventsListener.new)
       end
+      reset
     end
     @@driver
   end
@@ -45,6 +45,10 @@ class Corundum::Selenium::Driver
     @@driver.quit if @@driver
     @@driver = driver
   end
+
+  # =============== #
+  # Driver Commands #
+  # =============== #
 
   def self.visit(path)
     begin
@@ -120,34 +124,37 @@ class Corundum::Selenium::Driver
     driver.save_screenshot(screenshot_path)
   end
 
-  def self.reset!
-    # Use instance variable directly so we avoid starting the browser just to reset the session
-    begin
-      begin
-        driver.manage.delete_all_cookies
-      rescue Selenium::WebDriver::Error::UnhandledError
-        # delete_all_cookies fails when we've previously gone
-        # to about:blank, so we rescue this error and do nothing
-        # instead.
-      end
-      driver.navigate.to("about:blank")
-    rescue Selenium::WebDriver::Error::UnhandledAlertError
-      # This error is thrown if an unhandled alert is on the page
-      # Firefox appears to automatically dismiss this alert, chrome does not
-      # We'll try to accept it
-      begin
-        driver.switch_to.alert.accept
-      rescue Selenium::WebDriver::Error::NoAlertPresentError
-        # The alert is now gone - nothing to do
-      end
-      # try cleaning up the browser again
-      retry
-    end
-  end
+  # def self.reset!
+  #   # Use instance variable directly so we avoid starting the browser just to reset the session
+  #   begin
+  #     begin
+  #       driver.manage.delete_all_cookies
+  #     rescue Selenium::WebDriver::Error::UnhandledError
+  #       # delete_all_cookies fails when we've previously gone
+  #       # to about:blank, so we rescue this error and do nothing
+  #       # instead.
+  #     end
+  #     driver.navigate.to("about:blank")
+  #   rescue Selenium::WebDriver::Error::UnhandledAlertError
+  #     # This error is thrown if an unhandled alert is on the page
+  #     # Firefox appears to automatically dismiss this alert, chrome does not
+  #     # We'll try to accept it
+  #     begin
+  #       driver.switch_to.alert.accept
+  #     rescue Selenium::WebDriver::Error::NoAlertPresentError
+  #       # The alert is now gone - nothing to do
+  #     end
+  #     # try cleaning up the browser again
+  #     retry
+  #   end
+  # end
 
 end
 
-##
+
+
+### Handy Capybara methods that could be duplicated
+
 #
 # Webdriver supports frame name, id, index(zero-based) or {Capybara::Element} to find iframe
 #

@@ -40,6 +40,8 @@ class Logger
   end
 end # class logger
 
+
+
 # Singleton Logger class
 
 class Corundum::Log

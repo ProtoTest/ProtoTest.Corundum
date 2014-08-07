@@ -36,6 +36,10 @@ class Corundum::Selenium::Element
     @element = e
   end
 
+  # ================ #
+  # Element Commands #
+  # ================ #
+
   # soft failure, will not kill test immediately
   def verify(timeout=nil)
     Log.debug('Verifying element...')
