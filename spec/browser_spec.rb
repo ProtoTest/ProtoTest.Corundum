@@ -24,4 +24,11 @@ describe 'Browser driver spec' do
     Driver.verify_url(site)
   end
 
+  it 'Test 004 should raise an error when visiting a redirected website' do
+    site = "http://goo.gl/k4fDoB" #redirects to prototest.com
+    Driver.visit(site)
+    Log.info('The following error is anticipated.')
+    expect{Driver.verify_url(site)}.to raise_error
+  end
+
 end

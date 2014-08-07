@@ -150,7 +150,6 @@ class Corundum::ElementVerification
     # $verification_errors << VerificationError.new(error, take_screenshot=true)
     if @fail_test
       Log.error(message)
-      fail(message)
     else
       Log.warn(message)
     end

@@ -55,8 +55,9 @@ class Corundum::Selenium::Driver
       Log.debug("Navigating to url: (#{path}).")
       driver.navigate.to(path)
     rescue Exception => e
-      Log.error(e.message)
       Log.debug(e.backtrace.inspect)
+      Log.warn("Check url formatting.  http:// is required for proper test execution (www is optional).")
+      Log.error(e.message)
     end
   end
 

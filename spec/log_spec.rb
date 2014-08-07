@@ -11,7 +11,7 @@ describe 'Corundum logging spec' do
     sleep 1
     Log.warn('Warning example text.')
     sleep 1
-    Log.error('Error example text.')
+    expect{Log.error('Error example text.')}.to raise_error
     sleep 1
   end
 

@@ -61,20 +61,21 @@ class Corundum::Log
 # an unknown message that should always be logged
 # UNKNOWN = 5
 
-  def self.error msg
-    log.error msg
+  def self.error(msg)
+    log.error("\033[31m#{msg}\033[0m")  # Colors the text red
+    Kernel.fail(msg)
   end
 
-  def self.warn msg
-    log.warn msg
+  def self.warn(msg)
+    log.warn("\033[31m#{msg}\033[0m")  # Colors the text red
   end
 
-  def self.info msg
-    log.info msg
+  def self.info(msg)
+    log.info(msg)
   end
 
-  def self.debug msg
-    log.debug msg
+  def self.debug(msg)
+    log.debug(msg)
   end
 
   def self.add_device device
@@ -124,9 +125,9 @@ class Corundum::Log
         elsif sev.eql?("INFO")
           "[#{datetime.strftime('%Y-%m-%d %H:%M:%S')}][#{severity}]  > #{msg}\n"
         elsif sev.eql?("WARN")
-          "[#{datetime.strftime('%Y-%m-%d %H:%M:%S')}][#{severity}]  - #{msg}\n"
+          "[#{datetime.strftime('%Y-%m-%d %H:%M:%S')}][#{severity}]  X #{msg}\n"
         else
-          "[#{datetime.strftime('%Y-%m-%d %H:%M:%S')}][#{severity}] - #{msg}\n"
+          "[#{datetime.strftime('%Y-%m-%d %H:%M:%S')}][#{severity}] X #{msg}\n"
         end
       end
     end

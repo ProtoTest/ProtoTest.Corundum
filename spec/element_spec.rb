@@ -91,6 +91,7 @@ describe 'Corundum Element spec' do
 
   it 'Test 015 should give an error when verifying a non-existent element is on the page using a (WAIT_UNTIL) verification' do
     Driver.visit('http://www.google.com')
+    Log.info('The following error is anticipated.')
     expect {Element.new('Random element', :css, '#no_id').wait_until.visible}.to raise_error
   end
 
