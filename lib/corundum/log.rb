@@ -42,7 +42,7 @@ end # class logger
 
 # Singleton Logger class
 
-class Corundum::Logging
+class Corundum::Log
   @@logger = nil
 
 #
@@ -59,11 +59,20 @@ class Corundum::Logging
 # an unknown message that should always be logged
 # UNKNOWN = 5
 
-  def self.log
-    unless @@logger
-      initialize_logger
-    end
-    @@logger
+  def self.error msg
+    log.error msg
+  end
+
+  def self.warn msg
+    log.warn msg
+  end
+
+  def self.info msg
+    log.info msg
+  end
+
+  def self.debug msg
+    log.debug msg
   end
 
   def self.add_device device
@@ -82,6 +91,13 @@ class Corundum::Logging
   end
 
   private
+
+  def self.log
+    unless @@logger
+      initialize_logger
+    end
+    @@logger
+  end
 
   def self.initialize_logger
     unless @@logger
@@ -113,4 +129,4 @@ class Corundum::Logging
       end
     end
   end
-end # Logging module
+end # Log class

@@ -5,7 +5,7 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib/corundum'))
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib/corundum/selenium'))
 
 require 'config'
-require 'logging'
+require 'log'
 require 'junit_reporter'
 require 'custom_formatter'
 
@@ -20,6 +20,7 @@ require 'rspec'
 require 'date'
 require 'fileutils'
 include Corundum::Selenium
+include Corundum
 
 shared_context 'corundum' do
   include Corundum
@@ -54,9 +55,6 @@ shared_context 'corundum' do
 end
 
 
-# Logger object
-Log = Corundum::Logging::log
-
 # Create the test report root directory
 report_root_dir = File.expand_path(File.join(Corundum::Config::REPORTS_OUTPUT, 'spec_reports'))
 Dir.mkdir(report_root_dir) if not File.exist?(report_root_dir)
@@ -67,7 +65,7 @@ $current_run_dir = current_run_report_dir
 Dir.mkdir(current_run_report_dir)
 
 # Add the output log file for the rspec test run to the logger
-Corundum::Logging::add_device(File.open(File.join(current_run_report_dir, "spec_logging_output.log"), File::WRONLY | File::APPEND | File::CREAT))
+Log.add_device(File.open(File.join(current_run_report_dir, "spec_logging_output.log"), File::WRONLY | File::APPEND | File::CREAT))
 
 
 RSpec.configure do |config|
