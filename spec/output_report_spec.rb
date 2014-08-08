@@ -3,28 +3,48 @@ require 'spec_helper'
 describe 'Corundum output report spec' do
   include_context 'corundum'
 
-  it 'Test 001 should pass' do
-    sleep 1
+  it 'Test 001 should pass and take an extra screenshot' do
+    Driver.visit('http://www.google.com')
+    google_home = GoogleHome.new
+    google_home.search('Test 01')
+    Driver.save_screenshot
   end
 
-  it 'Test 002 should fail' do
+  it 'Test 002 should fail and capture a screenshot on failure' do
     Driver.visit('http://www.google.com')
+    google_home = GoogleHome.new
+    google_home.search('Test 02')
     Log.info('The following error is anticipated.')
     Element.new('Random element', :css, '#no_id').wait_until.visible
   end
 
-  it 'Test 003 should fail' do
+  it 'Test 003 should fail and capture a screenshot on failure' do
     Driver.visit('http://www.google.com')
+    google_home = GoogleHome.new
+    google_home.search('Test 03')
     Log.info('The following error is anticipated.')
     Element.new('Random element', :css, '#no_id').wait_until.visible
   end
 
-  it 'Test 004 should pass' do
+  it 'Test 004 should pass without a screenshot' do
+    Log.debug('Debug example text.')
     sleep 1
+    Log.info('Info example text.')
   end
 
-  it 'Test 005 should pass' do
-    sleep 1
+  it 'Test 005 should pass and take an element screenshot and then a whole browser screenshot' do
+    Driver.visit('http://www.google.com')
+    google_home = GoogleHome.new
+    google_home.google_logo.save_element_screenshot
+    Driver.save_screenshot
+    google_home.google_logo.save_element_screenshot
+    Driver.save_screenshot
+  end
+
+  it 'Test 006 should pass without a screenshot' do
+    Driver.visit('http://www.google.com')
+    google_home = GoogleHome.new
+    google_home.lucky_button.verify.text("I'm Feeling Lucky")
   end
 
 end

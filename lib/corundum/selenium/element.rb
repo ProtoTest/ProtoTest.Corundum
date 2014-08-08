@@ -168,7 +168,7 @@ class Corundum::Selenium::Element
     image2 = image1.to_image
     element_screenshot_path = File.join($current_run_dir, "#{name}__#{timestamp}.png")
     image2.save(element_screenshot_path)
-    $element_screenshot_path = element_screenshot_path
+    $screenshots_captured.push("#{name}__#{timestamp}.png")
   end
 
   def method_missing(method_sym, *arguments, &block)

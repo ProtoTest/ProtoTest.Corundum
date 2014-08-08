@@ -126,7 +126,8 @@ class Corundum::Selenium::Driver
     timestamp = Time.now.strftime("%Y_%m_%d__%H_%M_%S")
     screenshot_path = File.join($current_run_dir, "screenshot__#{timestamp}.png")
     driver.save_screenshot(screenshot_path)
-    $screenshot_name = "screenshot__#{timestamp}.png"  # used by custom_formatter.rb for embedding in report
+    $screenshots_captured.push("screenshot__#{timestamp}.png")  # used by custom_formatter.rb for embedding in report
+    $fail_screenshot = "screenshot__#{timestamp}.png"
   end
 
   # def self.reset!

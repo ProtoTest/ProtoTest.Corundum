@@ -43,6 +43,8 @@ shared_context 'corundum' do
     puts ("\n")
     Log.info("BEGINNING NEW TEST: #{example.description}")
     $verification_errors = []
+    $screenshots_captured = []
+    $fail_screenshot = nil
   end
 
   after(:each) do
