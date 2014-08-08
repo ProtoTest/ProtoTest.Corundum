@@ -2,6 +2,7 @@
 # Test formatting: [DRIVER].[VISIT](url)
 
 require 'selenium-webdriver'
+require 'uri'
 
 module Corundum
   module Selenium
@@ -91,10 +92,12 @@ class Corundum::Selenium::Driver
 
   def self.current_domain
     site_url = driver.current_url.to_s
-    domain = site_url.match(/(https?:\/\/)?(\S*\.)?([\w\d]*\.\w+)\/?/i)[3]
-    if (!domain.nil?)
-      Log.debug("Current domain is: (#{domain}).")
-      return domain
+    # domain = site_url.match(/(https?:\/\/)?(\S*\.)?([\w\d]*\.\w+)\/?/i)[3]
+    domain = URI.parse(site_url)
+    host = domain.host
+    if (!host.nil?)
+      Log.debug("Current domain is: (#{host}).")
+      return host
     else
       Log.error("Unable to parse URL.")
     end
@@ -123,6 +126,7 @@ class Corundum::Selenium::Driver
     timestamp = Time.now.strftime("%Y_%m_%d__%H_%M_%S")
     screenshot_path = File.join($current_run_dir, "screenshot__#{timestamp}.png")
     driver.save_screenshot(screenshot_path)
+    $screenshot_name = "screenshot__#{timestamp}.png"  # used by custom_formatter.rb for embedding in report
   end
 
   # def self.reset!

@@ -166,7 +166,9 @@ class Corundum::Selenium::Element
     image = ChunkyPNG::Image.from_file(screenshot_path.to_s)
     image1 = image.crop(location_x, location_y, element_width, element_height)
     image2 = image1.to_image
-    image2.save(File.join($current_run_dir, "#{name}__#{timestamp}.png"))
+    element_screenshot_path = File.join($current_run_dir, "#{name}__#{timestamp}.png")
+    image2.save(element_screenshot_path)
+    $element_screenshot_path = element_screenshot_path
   end
 
   def method_missing(method_sym, *arguments, &block)

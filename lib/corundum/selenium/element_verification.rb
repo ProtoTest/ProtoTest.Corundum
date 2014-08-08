@@ -149,14 +149,14 @@ class Corundum::ElementVerification
     # error = "#{@@fail_base_str}#{@element.name}(#{@element.by}=>'#{@element.locator}'): #{message} after #{@timeout} seconds"
     # $verification_errors << VerificationError.new(error, take_screenshot=true)
     if @fail_test
-      Log.error(message)
+      Log.error("#{message} ['#{@element.name}' (By:(#{@element.by} => '#{@element.locator}'))].")
     else
-      Log.warn(message)
+      Log.warn("#{message} ['#{@element.name}' (By:(#{@element.by} => '#{@element.locator}'))].")
     end
   end
 
   def log_success(message)
-    Log.debug("#{@@pass_base_str}#{@element.name}(#{@element.by}=>'#{@element.locator}'): #{message}")
+    Log.debug("#{@@pass_base_str} '#{@element.name}' (By:(#{@element.by} => '#{@element.locator}')): #{message}")
   end
 
 end

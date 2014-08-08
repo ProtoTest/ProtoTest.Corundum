@@ -29,6 +29,7 @@ class Logger
     end
 
     alias_method :old_write, :write
+
     def write(message)
       old_write(message)
 
@@ -39,7 +40,6 @@ class Logger
     end
   end
 end # class logger
-
 
 
 # Singleton Logger class
@@ -62,12 +62,13 @@ class Corundum::Log
 # UNKNOWN = 5
 
   def self.error(msg)
-    log.error("\033[31m#{msg}\033[0m")  # Colors the text red
+    log.error(msg)
+    Driver.save_screenshot if Corundum::Config::SCREENSHOT_ON_FAILURE
     Kernel.fail(msg)
   end
 
   def self.warn(msg)
-    log.warn("\033[31m#{msg}\033[0m")  # Colors the text red
+    log.warn(msg)
   end
 
   def self.info(msg)
@@ -88,7 +89,7 @@ class Corundum::Log
   end
 
   def self.close
-    @@devices.each {|dev| @@logger.detach(dev)}
+    @@devices.each { |dev| @@logger.detach(dev) }
     @@devices.clear
     @@logger.close if @@logger
   end
@@ -109,11 +110,16 @@ class Corundum::Log
 
       # messages that have the set level or higher will be logged
       case Corundum::Config::LOG_LEVEL
-        when :debug then level = Logger::DEBUG
-        when :info then level = Logger::INFO
-        when :warn then level = Logger::WARN
-        when :error then level = Logger::ERROR
-        when :fatal then level = Logger::FATAL
+        when :debug then
+          level = Logger::DEBUG
+        when :info then
+          level = Logger::INFO
+        when :warn then
+          level = Logger::WARN
+        when :error then
+          level = Logger::ERROR
+        when :fatal then
+          level = Logger::FATAL
       end
 
       @@logger.level = level
@@ -132,4 +138,5 @@ class Corundum::Log
       end
     end
   end
+
 end # Log class

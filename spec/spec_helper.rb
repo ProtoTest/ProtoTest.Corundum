@@ -10,6 +10,7 @@ $element_timeout = 15
 $log_level = :debug
 $highlight_verifications = true
 $highlight_duration = 0.100
+$screenshot_on_failure = true
 
 # Rspec Components
 require 'rspec'

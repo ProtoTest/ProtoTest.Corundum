@@ -11,6 +11,7 @@ module Corundum
     LOG_LEVEL = $log_level || :info
     HIGHLIGHT_VERIFICATIONS = $highlight_verifications
     HIGHLIGHT_DURATION = $highlight_duration || 0.100
+    SCREENSHOT_ON_FAILURE = $screenshot_on_failure
 
     #
     # Add a Constant to the Config class
