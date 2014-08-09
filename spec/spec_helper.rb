@@ -13,8 +13,6 @@ $highlight_duration = 0.100
 $screenshot_on_failure = true
 
 # Rspec Components
-require 'rspec'
-require 'rspec-expectations'
 require 'corundum'
 
 # Page Objects

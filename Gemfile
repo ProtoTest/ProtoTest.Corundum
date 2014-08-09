@@ -1,4 +1,11 @@
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in Corundum.gemspec
 gemspec
+
+gem 'bundler'
+gem 'rake'
+gem 'rspec'
+gem 'rspec-expectations'
+gem 'selenium-webdriver'
+gem 'builder'
+gem 'oily_png'

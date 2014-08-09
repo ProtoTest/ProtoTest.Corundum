@@ -3,13 +3,13 @@ lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
-  spec.name          = 'Corundum'
-  spec.version       = '0.0.1'
-  spec.authors       = ['Roland Burrows']
-  spec.email         = ['rburrows@prototest.com']
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
-  spec.homepage      = ''
+  spec.name          = 'corundum'
+  spec.version       = '1.0.0'
+  spec.authors       = ['ProtoTest, LLC']
+  spec.email         = ['info@prototest.com']
+  spec.summary       = 'Selenium web automation framework in ruby.'
+  spec.description   = 'Corundum was created to simplify the process of creating enterprise-scale automated testing suites.  The inclusion of advanced features, diagnostic information, easy configuration, and enhanced APIs helps make automating in code-based automation tools much more practical.'
+  spec.homepage      = 'http://www.prototest.com'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files -z`.split("\x0")
@@ -17,12 +17,12 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']
 
-  spec.add_development_dependency 'bundler', '~> 1.6'
-  spec.add_development_dependency 'rake'
-  spec.add_development_dependency 'rspec', '2.14.1'
-  spec.add_development_dependency 'rspec-expectations', '2.14.5'
-  spec.add_development_dependency 'selenium-webdriver', '2.42.0'
-  spec.add_development_dependency 'builder'
-  spec.add_development_dependency 'oily_png'
+  spec.add_dependency 'bundler', '~> 1.6'
+  spec.add_dependency 'rake'
+  spec.add_dependency 'rspec', '2.14.1'
+  spec.add_dependency 'rspec-expectations', '2.14.5'
+  spec.add_dependency 'selenium-webdriver', '2.42.0'
+  spec.add_dependency 'builder'
+  spec.add_dependency 'oily_png'
 
 end
