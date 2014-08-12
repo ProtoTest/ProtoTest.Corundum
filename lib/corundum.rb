@@ -72,6 +72,7 @@ shared_context 'corundum' do
   before(:each) do
     puts ("\n")
     Log.info("BEGINNING NEW TEST: #{example.description}")
+    Log.info("BROWSER: #{$browser}")
     $verification_errors = []
     $screenshots_captured = []
     $fail_screenshot = nil

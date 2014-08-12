@@ -103,4 +103,10 @@ describe 'Corundum Element spec' do
     gmail_home.nav_gmail_icon.wait_until.present
   end
 
+  it 'Test 017 should hover over an element and verify a new previously-hidden element' do
+    Driver.visit('http://www.denverpost.com')
+    Element.new('Tools', :xpath, "//a[@id='headerPrimaryToolsLink' and contains(.,'Tools')]").hover_over
+    Element.new('Archives', :xpath, "//li[@id='headerSecondaryArchives']").wait_until.visible
+  end
+
 end

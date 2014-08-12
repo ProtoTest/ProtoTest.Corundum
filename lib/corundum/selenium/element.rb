@@ -94,6 +94,15 @@ class Corundum::Selenium::Element
     element.location
   end
 
+  def hover_over
+    Log.debug("Hovering over element (#{self.to_s})...")
+    # @driver.mouse.move_to(element)   # Note: Doesn't work with Selenium 2.42 bindings for Firefox v31
+    # @driver.action.move_to(element).perform
+    # @driver.mouse_over(@locator)
+    ElementExtensions.hover_over(self)
+    sleep 2
+  end
+
   def scroll_into_view
     self.verify.present
     ElementExtensions.scroll_to(self)

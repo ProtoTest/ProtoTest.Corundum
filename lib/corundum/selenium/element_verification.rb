@@ -30,8 +30,11 @@ class Corundum::ElementVerification
     not_message = nil
     pass_message = nil
 
+    @element.present?
+
     if @not_verification
-      not_message = "does not contain text (#{text})"
+      not_message = "Element should not contain (#{text})"
+      pass_message = "does not contain text (#{text})"
     else
       not_message = "Element should contain (#{text})"
       pass_message = "contains text (#{text})"
@@ -42,11 +45,18 @@ class Corundum::ElementVerification
     wait = Selenium::WebDriver::Wait.new :timeout => @timeout, :interval => 1
     begin
       wait.until do
-        Log.debug("Confirming text (#{text}) is within element...")
-        condition = @element.present? && element_text.eql?(text)
+        condition = element_text.eql?(text)
+        condition_not = (element_text != (text))
         if condition != @not_verification
+          Log.debug("Confirming text (#{text}) is within element...")
           Corundum::ElementExtensions.highlight(@element) if Corundum::Config::HIGHLIGHT_VERIFICATIONS
           Log.debug("Verified: '#{@element.name}' (By:(#{@element.by} => '#{@element.locator}')) #{pass_message}.")
+          return @element
+        end
+        if condition_not == @not_verification
+          Log.debug("Confirming text (#{text}) is NOT within element...")
+          Corundum::ElementExtensions.highlight(@element) if Corundum::Config::HIGHLIGHT_VERIFICATIONS
+          Log.debug("Verified: '#{@element.name}' (By:(#{@element.by} => '#{@element.locator}')) #{pass_message}.  Actual text is: (#{element_text}).")
           return @element
         end
       end
@@ -55,7 +65,7 @@ class Corundum::ElementVerification
     end
 
     # Verification failure
-    log_issue("#{not_message}. Actual text is: (#{element_text}).")
+    log_issue("#{not_message}, but element's text is: (#{element_text}).")
 
     @element
   end
