@@ -28,6 +28,7 @@ class Corundum::ElementExtensions
 
   def self.hover_over(element)
     Driver.execute_script("var evObj = document.createEvent('MouseEvents'); evObj.initMouseEvent(\"mouseover\",true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null); arguments[0].dispatchEvent(evObj);", element.element)
+    sleep 2
   end
 
 end

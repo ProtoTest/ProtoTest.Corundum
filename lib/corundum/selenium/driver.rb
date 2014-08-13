@@ -30,14 +30,19 @@ class Corundum::Selenium::Driver
   end
 
   def self.driver
-    unless @@driver
-      @browser_type = Corundum::Config::BROWSER
-      if $target_ip && (!$target_ip.eql?('localhost'))
-        @@driver = Selenium::WebDriver.for(:remote, :url => "http://#{$target_ip}:4444/wd/hub", :desired_capabilities => Corundum::Config::BROWSER)
-      else
-        @@driver = Selenium::WebDriver.for(Corundum::Config::BROWSER) #, :listener => LogDriverEventsListener.new)
+    begin
+      unless @@driver
+        @browser_type = Corundum::Config::BROWSER
+        if $target_ip && (!$target_ip.eql?('localhost'))
+          @@driver = Selenium::WebDriver.for(:remote, :url => "http://#{$target_ip}:4444/wd/hub", :desired_capabilities => Corundum::Config::BROWSER)
+        else
+          @@driver = Selenium::WebDriver.for(Corundum::Config::BROWSER)
+        end
+        reset
       end
-      reset
+    rescue Exception => e
+      Log.debug(e.backtrace.inspect)
+      Log.error("Driver did not load within (#{Corundum::Config::PAGE_TIMEOUT}) seconds.  [#{e.message}]")
     end
     @@driver
   end
@@ -47,9 +52,9 @@ class Corundum::Selenium::Driver
     @@driver = driver
   end
 
-  # =============== #
-  # Driver Commands #
-  # =============== #
+# =============== #
+# Driver Commands #
+# =============== #
 
   def self.visit(path)
     begin
@@ -62,8 +67,7 @@ class Corundum::Selenium::Driver
       Log.debug("Page loaded in (#{page_load}) seconds.")
     rescue Exception => e
       Log.debug(e.backtrace.inspect)
-      Log.warn("Check url formatting.  http:// is required for proper test execution (www is optional).")
-      Log.error(e.message)
+      Log.error("Check url formatting.  http:// is required for proper test execution (www is optional).  [#{e.message}]")
     end
   end
 
@@ -131,37 +135,36 @@ class Corundum::Selenium::Driver
     timestamp = Time.now.strftime("%Y_%m_%d__%H_%M_%S")
     screenshot_path = File.join($current_run_dir, "screenshot__#{timestamp}.png")
     driver.save_screenshot(screenshot_path)
-    $screenshots_captured.push("screenshot__#{timestamp}.png")  # used by custom_formatter.rb for embedding in report
+    $screenshots_captured.push("screenshot__#{timestamp}.png") # used by custom_formatter.rb for embedding in report
     $fail_screenshot = "screenshot__#{timestamp}.png"
   end
 
-  # def self.reset!
-  #   # Use instance variable directly so we avoid starting the browser just to reset the session
-  #   begin
-  #     begin
-  #       driver.manage.delete_all_cookies
-  #     rescue Selenium::WebDriver::Error::UnhandledError
-  #       # delete_all_cookies fails when we've previously gone
-  #       # to about:blank, so we rescue this error and do nothing
-  #       # instead.
-  #     end
-  #     driver.navigate.to("about:blank")
-  #   rescue Selenium::WebDriver::Error::UnhandledAlertError
-  #     # This error is thrown if an unhandled alert is on the page
-  #     # Firefox appears to automatically dismiss this alert, chrome does not
-  #     # We'll try to accept it
-  #     begin
-  #       driver.switch_to.alert.accept
-  #     rescue Selenium::WebDriver::Error::NoAlertPresentError
-  #       # The alert is now gone - nothing to do
-  #     end
-  #     # try cleaning up the browser again
-  #     retry
-  #   end
-  # end
+# def self.reset!
+#   # Use instance variable directly so we avoid starting the browser just to reset the session
+#   begin
+#     begin
+#       driver.manage.delete_all_cookies
+#     rescue Selenium::WebDriver::Error::UnhandledError
+#       # delete_all_cookies fails when we've previously gone
+#       # to about:blank, so we rescue this error and do nothing
+#       # instead.
+#     end
+#     driver.navigate.to("about:blank")
+#   rescue Selenium::WebDriver::Error::UnhandledAlertError
+#     # This error is thrown if an unhandled alert is on the page
+#     # Firefox appears to automatically dismiss this alert, chrome does not
+#     # We'll try to accept it
+#     begin
+#       driver.switch_to.alert.accept
+#     rescue Selenium::WebDriver::Error::NoAlertPresentError
+#       # The alert is now gone - nothing to do
+#     end
+#     # try cleaning up the browser again
+#     retry
+#   end
+# end
 
 end
-
 
 
 ### Handy Capybara methods that could be duplicated
