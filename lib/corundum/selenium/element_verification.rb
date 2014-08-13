@@ -15,120 +15,114 @@ class Corundum::ElementVerification
   # @param [Integer] timeout
   # @param [Boolean] not_verification - Whether or not we are 'NOT' verifying something about the element
   #
-  def initialize(element, timeout, fail_test=false, not_verification=false)
+  def initialize(element, timeout, fail_test=false, element_should_exist=true)
     @element = element # Corundum::Element
     @timeout = timeout
-    @not_verification = not_verification
+    @should_exist = element_should_exist
     @fail_test = fail_test
   end
 
   def not
-    ElementVerification.new(@element, @timeout, @fail_test, not_verification=true)
+    ElementVerification.new(@element, @timeout, @fail_test, element_should_exist=false)
   end
 
   def text(text)
-    not_message = nil
+    fail_message = nil
     pass_message = nil
-
+    should_have_text = @should_exist
+    element_text = @element.text
     @element.present?
 
-    if @not_verification
-      not_message = "Element should not contain (#{text})"
-      pass_message = "does not contain text (#{text})"
+    if should_have_text
+      fail_message = "Element should contain (#{text}), but does not."
+      pass_message = "contains text (#{text})."
     else
-      not_message = "Element should contain (#{text})"
-      pass_message = "contains text (#{text})"
+      fail_message = "Element should not contain (#{text}), but does."
+      pass_message = "does not contain text (#{text})."
     end
-
-    element_text = @element.text
 
     wait = Selenium::WebDriver::Wait.new :timeout => @timeout, :interval => 1
     begin
       wait.until do
-        condition = element_text.eql?(text)
-        condition_not = (element_text != (text))
-        if condition != @not_verification
+        element_contains_text = element_text.eql?(text)
+        if should_have_text && element_contains_text
           Log.debug("Confirming text (#{text}) is within element...")
           Corundum::ElementExtensions.highlight(@element) if Corundum::Config::HIGHLIGHT_VERIFICATIONS
-          Log.debug("Verified: '#{@element.name}' (By:(#{@element.by} => '#{@element.locator}')) #{pass_message}.")
-          return @element
-        end
-        if condition_not == @not_verification
+          Log.debug("Verified: '#{@element.name}' (By:(#{@element.by} => '#{@element.locator}')) #{pass_message}")
+        elsif !should_have_text && !element_contains_text
           Log.debug("Confirming text (#{text}) is NOT within element...")
           Corundum::ElementExtensions.highlight(@element) if Corundum::Config::HIGHLIGHT_VERIFICATIONS
-          Log.debug("Verified: '#{@element.name}' (By:(#{@element.by} => '#{@element.locator}')) #{pass_message}.  Actual text is: (#{element_text}).")
-          return @element
+          Log.debug("Verified: '#{@element.name}' (By:(#{@element.by} => '#{@element.locator}')) #{pass_message}  Actual text is: (#{element_text}).")
+        else
+          log_issue("#{fail_message}  Element's text is: (#{element_text}).")
         end
       end
-    rescue
-      # fall-through
+      @element
     end
-
-    # Verification failure
-    log_issue("#{not_message}, but element's text is: (#{element_text}).")
-
-    @element
   end
 
   def visible
-    not_message = nil
+    fail_message = nil
     pass_message = nil
+    should_be_visible = @should_exist
 
-    if @not_verification
-      not_message = "Element is not visible."
+    if should_be_visible
+      fail_message = "Element should be visible."
+      pass_message = "Element is visible"
     else
-      not_message = "Element should be visible."
-      pass_message = "is visible"
+      fail_message = "Element should not be visible."
+      pass_message = "Element is not visible"
     end
 
     wait = Selenium::WebDriver::Wait.new :timeout => @timeout, :interval => 1
     begin
       wait.until do
-        condition = @element.displayed?
-        if condition != @not_verification
+        element_is_displayed = @element.displayed?
+        if element_is_displayed && should_be_visible
           Corundum::ElementExtensions.highlight(@element) if Corundum::Config::HIGHLIGHT_VERIFICATIONS
           Log.debug("Verified: '#{@element.name}' (By:(#{@element.by} => '#{@element.locator}')) #{pass_message}.")
           return @element
+        elsif !element_is_displayed && !should_be_visible
+          Log.debug("Confirming element is NOT visible...")
+          Log.debug("Verified: '#{@element.name}' (By:(#{@element.by} => '#{@element.locator}')) #{pass_message}.")
+        else
+          log_issue(fail_message)
         end
       end
-    rescue
-      # fall-through
+      @element
     end
-
-    # Verification failure
-    log_issue(not_message)
-
-    @element
   end
 
   def present
+    fail_message = nil
     pass_message = nil
+    should_be_present = @should_exist
 
-    if @not_verification
-      not_message = "Element is not present."
-    else
-      not_message = "Element should be present."
+    if should_be_present
+      fail_message = "Element should be present."
       pass_message = "is present"
+    else
+      fail_message = "Element should NOT present."
+      pass_message = "is not present"
     end
 
     wait = Selenium::WebDriver::Wait.new :timeout => @timeout, :interval => 1
     begin
       wait.until do
-        condition = @element.present?
-        if condition != @not_verification
+        element_is_present = @element.present?
+        if element_is_present && should_be_present
           Corundum::ElementExtensions.highlight(@element) if Corundum::Config::HIGHLIGHT_VERIFICATIONS
           Log.debug("Verified: '#{@element.name}' (By:(#{@element.by} => '#{@element.locator}')) #{pass_message}.")
           return @element
+        elsif !element_is_present && !should_be_present
+          Log.debug("Confirming element is NOT present...")
+          Log.debug("Verified: '#{@element.name}' (By:(#{@element.by} => '#{@element.locator}')) #{pass_message}.")
+        else
+          log_issue(fail_message)
         end
       end
-    rescue
-      # fall-through
+      @element
     end
-
-    # Verification failure
-    log_issue(not_message)
-
-    @element
   end
 
   # TODO:
