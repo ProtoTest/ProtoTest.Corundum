@@ -54,7 +54,12 @@ class Corundum::Selenium::Driver
   def self.visit(path)
     begin
       Log.debug("Navigating to url: (#{path}).")
+      driver
+      time_start = Time.now
       driver.navigate.to(path)
+      time_end = Time.new
+      page_load = (time_end - time_start)
+      Log.debug("Page loaded in (#{page_load}) seconds.")
     rescue Exception => e
       Log.debug(e.backtrace.inspect)
       Log.warn("Check url formatting.  http:// is required for proper test execution (www is optional).")

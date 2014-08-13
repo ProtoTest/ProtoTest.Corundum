@@ -10,6 +10,7 @@ describe 'Browser driver spec' do
     site = test_url #pulls from test config (above)
     test_driver.visit(site) #Driver pulls from test config (above)
     test_driver.verify_url(site)
+    test_driver.visit('http://www.google.com')
   end
 
   it 'Test 002 should launch browser and url (specified by config class)' do
