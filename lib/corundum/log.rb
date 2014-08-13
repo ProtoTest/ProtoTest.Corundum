@@ -69,6 +69,8 @@ class Corundum::Log
 
   def self.warn(msg)
     log.warn(msg)
+    Driver.save_screenshot if Corundum::Config::SCREENSHOT_ON_FAILURE
+    $verification_warnings << msg
   end
 
   def self.info(msg)

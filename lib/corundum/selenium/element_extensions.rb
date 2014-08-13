@@ -24,6 +24,7 @@ class Corundum::ElementExtensions
   def self.scroll_to(element)
     Log.debug("Scrolling element into view...")
     Driver.execute_script("arguments[0].scrollIntoView(); return;", element.element)
+    sleep 1
   end
 
   def self.hover_over(element)

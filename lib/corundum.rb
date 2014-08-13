@@ -13,7 +13,6 @@ require 'driver'
 require 'element'
 require 'element_extensions'
 require 'element_verification'
-require 'event_listener'
 
 require 'rspec'
 require 'rspec-expectations'
@@ -55,6 +54,7 @@ shared_context 'corundum' do
   include Corundum
 
   before(:all) do
+    $verifications_total = 0
     Log.info("BEGINNING TEST SUITE")
     Log.info("CREATING REPORT FOLDER @ #{$current_run_dir}")
     if $target_ip
@@ -67,22 +67,33 @@ shared_context 'corundum' do
   after(:all) do
     puts ("\n")
     Log.info("TEST SUITE COMPLETE")
+    Log.info("Verifications confirmed: (#{$verifications_total} total).")
   end
 
   before(:each) do
     puts ("\n")
     Log.info("BEGINNING NEW TEST: #{example.description}")
     Log.info("BROWSER: #{$browser}")
-    $verification_errors = []
+    $verification_passes = 0
+    $verification_warnings = []
     $screenshots_captured = []
     $fail_screenshot = nil
   end
 
   after(:each) do
-    # TODO: Create some test_data container to store all of this stuff related to the test run, then throw the verification errors in the HTML report
     Log.debug('Executing test cleanup...')
     Corundum::Selenium::Driver.quit
     Log.info('TEST COMPLETE')
+    Log.info("Verifications confirmed: (#{$verification_passes} total).")
+    $verifications_total += $verification_passes
+    if $verification_warnings.empty?
+      Log.info("No warnings detected during test run.")
+    else
+      Log.info("Warnings detected during test run (#{$verification_warnings.length} total).")
+      msg = "TEST FAILURE: Warnings detected during test execution:"
+      $verification_warnings.each { |warning_message| msg << "\n\t" + warning_message }
+      Kernel.fail(msg)
+    end
   end
 
 end

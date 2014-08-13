@@ -65,6 +65,7 @@ class Corundum::Selenium::Driver
       time_end = Time.new
       page_load = (time_end - time_start)
       Log.debug("Page loaded in (#{page_load}) seconds.")
+      $verification_passes += 1
     rescue Exception => e
       Log.debug(e.backtrace.inspect)
       Log.error("Check url formatting.  http:// is required for proper test execution (www is optional).  [#{e.message}]")
@@ -117,6 +118,7 @@ class Corundum::Selenium::Driver
     domain = self.current_domain.to_s
     if url.include?(domain)
       Log.debug("Confirmed. (#{url}) includes (#{domain}).")
+      $verification_passes += 1
     else
       Log.error("(#{url}) does not include (#{domain}).")
     end

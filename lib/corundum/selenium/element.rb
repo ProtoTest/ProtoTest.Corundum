@@ -27,7 +27,7 @@ class Corundum::Selenium::Element
   def element
     if @element.nil? or is_stale?
       wait = Selenium::WebDriver::Wait.new :timeout => Corundum::Config::ELEMENT_TIMEOUT, :interval => 1
-      wait.until {@element = @driver.find_element(@by, @locator); Log.debug("Finding element #{self}..."); @element.enabled?}
+      wait.until { @element = @driver.find_element(@by, @locator); Log.debug("Finding element #{self}..."); @element.enabled? }
     end
     @element
   end
@@ -42,14 +42,14 @@ class Corundum::Selenium::Element
 
   # soft failure, will not kill test immediately
   def verify(timeout=nil)
-    Log.debug('Verifying element...')
+    Log.debug('Verifying new element...')
     timeout = Corundum::Config::ELEMENT_TIMEOUT if timeout.nil?
     ElementVerification.new(self, timeout)
   end
 
   # hard failure, will kill test immediately
   def wait_until(timeout=nil)
-    Log.debug('Waiting for element...')
+    Log.debug('Waiting for new element...')
     timeout = Corundum::Config::ELEMENT_TIMEOUT if timeout.nil?
     ElementVerification.new(self, timeout, fail_test=true)
   end
@@ -80,14 +80,24 @@ class Corundum::Selenium::Element
 
   def click
     Log.debug("Clicking on #{self}")
-    ElementExtensions.highlight(self) if Corundum::Config::HIGHLIGHT_VERIFICATIONS
-    element.click
+    if element.enabled?
+      ElementExtensions.highlight(self) if Corundum::Config::HIGHLIGHT_VERIFICATIONS
+      $verification_passes += 1
+      element.click
+    else
+      Log.error('Cannot click on element.  Element is not present.')
+    end
   end
 
   def send_keys(*args)
     Log.debug("Typing: #{args} into element: (#{self}).")
-    ElementExtensions.highlight(self) if Corundum::Config::HIGHLIGHT_VERIFICATIONS
-    element.send_keys *args
+    if element.enabled?
+      ElementExtensions.highlight(self) if Corundum::Config::HIGHLIGHT_VERIFICATIONS
+      $verification_passes += 1
+      element.send_keys *args
+    else
+      Log.error('Cannot type into element.  Element is not present.')
+    end
   end
 
   def location
@@ -99,12 +109,21 @@ class Corundum::Selenium::Element
     # @driver.mouse.move_to(element)            # Note: Doesn't work with Selenium 2.42 bindings for Firefox v31
     # @driver.action.move_to(element).perform
     # @driver.mouse_over(@locator)
-    ElementExtensions.hover_over(self)          # Javascript workaround to above issue
+    if element.enabled?
+      $verification_passes += 1
+      ElementExtensions.hover_over(self) # Javascript workaround to above issue
+    else
+      Log.error('Cannot click on element.  Element is not present.')
+    end
   end
 
   def scroll_into_view
-    self.verify.present
-    ElementExtensions.scroll_to(self)
+    if element.enabled?
+      $verification_passes += 1
+      ElementExtensions.scroll_to(self)
+    else
+      Log.error('Cannot click on element.  Element is not present.')
+    end
   end
 
   def size

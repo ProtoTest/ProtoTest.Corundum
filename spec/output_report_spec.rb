@@ -10,20 +10,22 @@ describe 'Corundum output report spec' do
     Driver.save_screenshot
   end
 
-  it 'Test 002 should fail and capture a screenshot on failure' do
+  it 'Test 002 should hard fail and capture a screenshot on failure' do
     Driver.visit('http://www.google.com')
     google_home = GoogleHome.new
     google_home.search('Test 02')
     Log.info('The following error is anticipated.')
     Element.new('Random element', :css, '#no_id').wait_until.visible
+    Element.new('Random element', :xpath, '//*').wait_until.present
   end
 
-  it 'Test 003 should fail and capture a screenshot on failure' do
+  it 'Test 003 should soft fail and capture a screenshot on failure' do
     Driver.visit('http://www.google.com')
     google_home = GoogleHome.new
     google_home.search('Test 03')
     Log.info('The following error is anticipated.')
-    Element.new('Random element', :css, '#no_id').wait_until.visible
+    Element.new('Random element', :css, '#no_id').verify.visible
+    Element.new('Random element', :xpath, '//*').verify.present
   end
 
   it 'Test 004 should pass without a screenshot' do
@@ -37,7 +39,8 @@ describe 'Corundum output report spec' do
     google_home = GoogleHome.new
     google_home.google_logo.save_element_screenshot
     Driver.save_screenshot
-    google_home.google_logo.save_element_screenshot
+    google_home.search_button.save_element_screenshot
+    google_home.search('Test 05')
     Driver.save_screenshot
   end
 

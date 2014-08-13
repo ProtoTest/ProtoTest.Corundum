@@ -15,6 +15,7 @@ describe 'Corundum Driver extensions spec' do
     google_home.search_box.verify.visible
     google_home.search_button.verify.visible
     google_home.lucky_button.verify.visible
+    $verification_passes.should eql(10)
   end
 
   it 'Test 002 should scroll an element into view' do
@@ -22,6 +23,7 @@ describe 'Corundum Driver extensions spec' do
     copyright_bar = Element.new('Copyright bar', :xpath, "//p[@class='copyright']")
     copyright_bar.scroll_into_view
     copyright_bar.verify.visible
+    $verification_passes.should eql(3)
   end
 
 end

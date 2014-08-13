@@ -31,14 +31,18 @@ class Corundum::ElementVerification
     pass_message = nil
     should_have_text = @should_exist
     element_text = @element.text
-    @element.present?
+    if @element.present?
+      $verification_passes += 1
+    else
+      Log.error("Cannot determine element text.  Element is not present.")
+    end
 
     if should_have_text
-      fail_message = "Element should contain (#{text}), but does not."
+      fail_message = "Element should contain text (#{text}), but does not."
       pass_message = "contains text (#{text})."
     else
-      fail_message = "Element should not contain (#{text}), but does."
-      pass_message = "does not contain text (#{text})."
+      fail_message = "Element should not contain text (#{text}), but does."
+      pass_message = "does not contain text (#{text}).  Actual text is: (#{element_text})."
     end
 
     wait = Selenium::WebDriver::Wait.new :timeout => @timeout, :interval => 1
@@ -48,11 +52,11 @@ class Corundum::ElementVerification
         if should_have_text && element_contains_text
           Log.debug("Confirming text (#{text}) is within element...")
           Corundum::ElementExtensions.highlight(@element) if Corundum::Config::HIGHLIGHT_VERIFICATIONS
-          Log.debug("Verified: '#{@element.name}' (By:(#{@element.by} => '#{@element.locator}')) #{pass_message}")
+          log_success(pass_message)
         elsif !should_have_text && !element_contains_text
           Log.debug("Confirming text (#{text}) is NOT within element...")
           Corundum::ElementExtensions.highlight(@element) if Corundum::Config::HIGHLIGHT_VERIFICATIONS
-          Log.debug("Verified: '#{@element.name}' (By:(#{@element.by} => '#{@element.locator}')) #{pass_message}  Actual text is: (#{element_text}).")
+          log_success(pass_message)
         else
           log_issue("#{fail_message}  Element's text is: (#{element_text}).")
         end
@@ -80,11 +84,11 @@ class Corundum::ElementVerification
         element_is_displayed = @element.displayed?
         if element_is_displayed && should_be_visible
           Corundum::ElementExtensions.highlight(@element) if Corundum::Config::HIGHLIGHT_VERIFICATIONS
-          Log.debug("Verified: '#{@element.name}' (By:(#{@element.by} => '#{@element.locator}')) #{pass_message}.")
+          log_success(pass_message)
           return @element
         elsif !element_is_displayed && !should_be_visible
           Log.debug("Confirming element is NOT visible...")
-          Log.debug("Verified: '#{@element.name}' (By:(#{@element.by} => '#{@element.locator}')) #{pass_message}.")
+          log_success(pass_message)
         else
           log_issue(fail_message)
         end
@@ -112,11 +116,11 @@ class Corundum::ElementVerification
         element_is_present = @element.present?
         if element_is_present && should_be_present
           Corundum::ElementExtensions.highlight(@element) if Corundum::Config::HIGHLIGHT_VERIFICATIONS
-          Log.debug("Verified: '#{@element.name}' (By:(#{@element.by} => '#{@element.locator}')) #{pass_message}.")
+          log_success(pass_message)
           return @element
         elsif !element_is_present && !should_be_present
           Log.debug("Confirming element is NOT present...")
-          Log.debug("Verified: '#{@element.name}' (By:(#{@element.by} => '#{@element.locator}')) #{pass_message}.")
+          log_success(pass_message)
         else
           log_issue(fail_message)
         end
@@ -159,8 +163,9 @@ class Corundum::ElementVerification
     end
   end
 
-  def log_success(message)
-    Log.debug("#{@@pass_base_str} '#{@element.name}' (By:(#{@element.by} => '#{@element.locator}')): #{message}")
+  def log_success(pass_message)
+    $verification_passes += 1
+    Log.debug("Verified: '#{@element.name}' (By:(#{@element.by} => '#{@element.locator}')) #{pass_message}")
   end
 
 end

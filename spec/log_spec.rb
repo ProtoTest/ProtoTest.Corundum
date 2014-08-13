@@ -11,6 +11,9 @@ describe 'Corundum logging spec' do
     sleep 1
     Log.warn('Warning example text.')
     sleep 1
+    $verification_warnings.length.should eql(1)
+    $verification_warnings = []
+    $verification_passes.should eql(0)
     expect{Log.error('Error example text.')}.to raise_error
     sleep 1
   end
@@ -20,6 +23,7 @@ describe 'Corundum logging spec' do
     Driver.save_screenshot
     google_home = GoogleHome.new
     google_home.google_logo.save_element_screenshot
+    $verification_passes.should eql(2)
   end
 
 end
