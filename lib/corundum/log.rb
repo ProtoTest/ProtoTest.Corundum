@@ -45,70 +45,64 @@ end # class logger
 # Singleton Logger class
 
 class Corundum::Log
-  @@logger = nil
+  # make this class static
+  class << self
 
-#
-# more generic than INFO, useful for debugging issues
-# DEBUG = 0
-# generic, useful information about system operation
-# INFO = 1
-# a warning
-# WARN = 2
-# a handleable error condition
-# ERROR = 3
-# an unhandleable error that results in a program crash
-# FATAL = 4
-# an unknown message that should always be logged
-# UNKNOWN = 5
+  #
+  # more generic than INFO, useful for debugging issues
+  # DEBUG = 0
+  # generic, useful information about system operation
+  # INFO = 1
+  # a warning
+  # WARN = 2
+  # a handleable error condition
+  # ERROR = 3
+  # an unhandleable error that results in a program crash
+  # FATAL = 4
+  # an unknown message that should always be logged
+  # UNKNOWN = 5
 
-  def self.error(msg)
-    log.error(msg)
-    Driver.save_screenshot if Corundum::Config::SCREENSHOT_ON_FAILURE
-    Kernel.fail(msg)
-  end
-
-  def self.warn(msg)
-    log.warn(msg)
-    Driver.save_screenshot if Corundum::Config::SCREENSHOT_ON_FAILURE
-    $verification_warnings << msg
-  end
-
-  def self.info(msg)
-    log.info(msg)
-  end
-
-  def self.debug(msg)
-    log.debug(msg)
-  end
-
-  def self.add_device device
-    @@devices ||= []
-    unless @@logger
-      initialize_logger
+    def error(msg)
+      log.error(msg)
+      Driver.save_screenshot if Corundum::Config::SCREENSHOT_ON_FAILURE
+      Kernel.fail(msg)
     end
-    @@logger.attach(device)
-    @@devices << device
-  end
 
-  def self.close
-    @@devices.each { |dev| @@logger.detach(dev) }
-    @@devices.clear
-    @@logger.close if @@logger
-  end
-
-  private
-
-  def self.log
-    unless @@logger
-      initialize_logger
+    def warn(msg)
+      log.warn(msg)
+      Driver.save_screenshot if Corundum::Config::SCREENSHOT_ON_FAILURE
+      $verification_warnings << msg
     end
-    @@logger
-  end
 
-  def self.initialize_logger
-    unless @@logger
+    def info(msg)
+      log.info(msg)
+    end
+
+    def debug(msg)
+      log.debug(msg)
+    end
+
+    def add_device device
+      @@devices ||= []
+      log.attach(device)
+      @@devices << device
+    end
+
+    def close
+      @@devices.each { |dev| @@logger.detach(dev) }
+      @@devices.clear
+      log.close if log
+    end
+
+    private
+
+    def log
+      @@logger ||= initialize_logger
+    end
+
+    def initialize_logger
       # log to STDOUT and file
-      @@logger = Logger.new(STDOUT)
+      logger ||= Logger.new(STDOUT)
 
       # messages that have the set level or higher will be logged
       case Corundum::Config::LOG_LEVEL
@@ -124,21 +118,23 @@ class Corundum::Log
           level = Logger::FATAL
       end
 
-      @@logger.level = level
+      logger.level = level
 
-      @@logger.formatter = proc do |severity, datetime, progname, msg|
+      logger.formatter = proc do |severity, datetime, progname, msg|
+        base_msg = "[#{datetime.strftime('%Y-%m-%d %H:%M:%S')}][#{severity}]"
         sev = severity.to_s
         if sev.eql?("DEBUG")
-          "[#{datetime.strftime('%Y-%m-%d %H:%M:%S')}][#{severity}]   #{msg}\n"
+          "#{base_msg}   #{msg}\n"
         elsif sev.eql?("INFO")
-          "[#{datetime.strftime('%Y-%m-%d %H:%M:%S')}][#{severity}]  > #{msg}\n"
+          "#{base_msg}  > #{msg}\n"
         elsif sev.eql?("WARN")
-          "[#{datetime.strftime('%Y-%m-%d %H:%M:%S')}][#{severity}]  X #{msg}\n"
+          "#{base_msg}  X #{msg}\n"
         else
-          "[#{datetime.strftime('%Y-%m-%d %H:%M:%S')}][#{severity}] X #{msg}\n"
+          "#{base_msg} X #{msg}\n"
         end
       end
-    end
-  end
 
+      logger
+    end # initialize_logger
+  end # class << self
 end # Log class
