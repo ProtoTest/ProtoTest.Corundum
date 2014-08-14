@@ -68,7 +68,7 @@ class Corundum::Selenium::Driver
       $verification_passes += 1
     rescue Exception => e
       Log.debug(e.backtrace.inspect)
-      Log.error("Check url formatting.  http:// is required for proper test execution (www is optional).  [#{e.message}]")
+      Log.error("#{e.message}.  Also be sure to check the url formatting.  http:// is required for proper test execution (www is optional).")
     end
   end
 
