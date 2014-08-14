@@ -72,10 +72,10 @@ class Corundum::ElementVerification
 
     if should_be_visible
       fail_message = "Element should be visible."
-      pass_message = "Element is visible"
+      pass_message = "Element is visible."
     else
       fail_message = "Element should not be visible."
-      pass_message = "Element is not visible"
+      pass_message = "Element is not visible."
     end
 
     wait = Selenium::WebDriver::Wait.new :timeout => @timeout, :interval => 1
@@ -104,10 +104,10 @@ class Corundum::ElementVerification
 
     if should_be_present
       fail_message = "Element should be present."
-      pass_message = "is present"
+      pass_message = "is present."
     else
       fail_message = "Element should NOT present."
-      pass_message = "is not present"
+      pass_message = "is not present."
     end
 
     wait = Selenium::WebDriver::Wait.new :timeout => @timeout, :interval => 1

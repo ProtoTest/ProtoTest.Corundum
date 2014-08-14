@@ -10,6 +10,7 @@ require 'junit_reporter'
 require 'custom_formatter'
 
 require 'driver'
+require 'driver_extensions'
 require 'element'
 require 'element_extensions'
 require 'element_verification'

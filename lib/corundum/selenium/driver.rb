@@ -68,7 +68,7 @@ class Corundum::Selenium::Driver
       $verification_passes += 1
     rescue Exception => e
       Log.debug(e.backtrace.inspect)
-      Log.error("#{e.message}.  Also be sure to check the url formatting.  http:// is required for proper test execution (www is optional).")
+      Log.error("#{e.message} - Also be sure to check the url formatting.  http:// is required for proper test execution (www is optional).")
     end
   end
 
@@ -128,6 +128,10 @@ class Corundum::Selenium::Driver
     driver.execute_script(script, element)
   end
 
+  def self.execute_script_driver(script)
+    driver.execute_script(script)
+  end
+
   def self.evaluate_script(script)
     driver.execute_script "return #{script}"
   end
@@ -141,37 +145,62 @@ class Corundum::Selenium::Driver
     $fail_screenshot = "screenshot__#{timestamp}.png"
   end
 
-# def self.reset!
-#   # Use instance variable directly so we avoid starting the browser just to reset the session
-#   begin
-#     begin
-#       driver.manage.delete_all_cookies
-#     rescue Selenium::WebDriver::Error::UnhandledError
-#       # delete_all_cookies fails when we've previously gone
-#       # to about:blank, so we rescue this error and do nothing
-#       # instead.
-#     end
-#     driver.navigate.to("about:blank")
-#   rescue Selenium::WebDriver::Error::UnhandledAlertError
-#     # This error is thrown if an unhandled alert is on the page
-#     # Firefox appears to automatically dismiss this alert, chrome does not
-#     # We'll try to accept it
-#     begin
-#       driver.switch_to.alert.accept
-#     rescue Selenium::WebDriver::Error::NoAlertPresentError
-#       # The alert is now gone - nothing to do
-#     end
-#     # try cleaning up the browser again
-#     retry
-#   end
-# end
+  def self.list_open_windows
+    handles = driver.window_handles
+    Log.debug("List of active windows:")
+    handles.each do |handle|
+      driver.switch_to.window(handle)
+      Log.debug("|  Window with title: (#{driver.title}) and handle: #{handle} is currently open.")
+    end
+    driver.switch_to.window(driver.window_handles.first)
+  end
+
+  def self.open_new_window(url)
+    Log.debug("Opening new window and loading url (#{url})...")
+    DriverExtensions.open_new_window(url)
+  end
+
+  def self.close_window
+    Log.debug("Closing window (#{driver.title})...")
+    DriverExtensions.close_window
+  end
+
+  def self.switch_to_window(title)
+    driver.switch_to.window(driver.window_handles.first)
+    current_title = driver.title
+    Log.debug("Current window is: (#{current_title}).  Switching to next window (#{title})...")
+    handles = driver.window_handles
+      handles.each do |handle|
+        if driver.title == title
+          Log.debug("Window (#{driver.title}) is now the active window.")
+          return
+        end
+        driver.switch_to.window(handle)
+      end
+    list_open_windows
+    Log.error("Unable to switch to window with title #{title}.")
+  end
+
+  def self.switch_to_next_window
+    current_title = driver.title
+    Log.debug("Current window is: (#{current_title}).  Switching to next window...")
+    driver.switch_to.window(driver.window_handles.last)
+    Log.debug("Window (#{driver.title}) is now the active window.")
+  end
+
+  def self.switch_to_main_window
+    current_title = driver.title
+    Log.debug("Current window is: (#{current_title}).  Switching to main window...")
+    driver.switch_to.window(driver.window_handles.first)
+    Log.debug("Window (#{driver.title}) is now the active window.")
+  end
 
 end
 
 
+
 ### Handy Capybara methods that could be duplicated
 
-#
 # Webdriver supports frame name, id, index(zero-based) or {Capybara::Element} to find iframe
 #
 # @overload within_frame(index)
@@ -193,10 +222,6 @@ end
 #   @frame_handles[window_handle].pop
 #   switch_to.default_content
 #   @frame_handles[window_handle].each { |fh| switch_to.frame(fh) }
-# end
-#
-# def current_window_handle
-#   window_handle
 # end
 #
 # def window_size(handle)
@@ -259,14 +284,6 @@ end
 #   handle = find_window(locator)
 #   switch_to.window(handle) { yield }
 # end
-#
-#  def invalid_element_errors
-#    [Selenium::WebDriver::Error::StaleElementReferenceError, Selenium::WebDriver::Error::UnhandledError, Selenium::WebDriver::Error::ElementNotVisibleError]
-#  end
-#
-#  def no_such_window_error
-#    Selenium::WebDriver::Error::NoSuchWindowError
-#  end
 #
 # private
 #

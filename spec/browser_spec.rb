@@ -36,4 +36,46 @@ describe 'Browser driver spec' do
     expect{Driver.verify_url(site)}.to raise_error
   end
 
+  it 'Test 005 should switch between next and main windows' do
+    Driver.visit("http://accounts.google.com")
+    Driver.verify_url("accounts.google.com")
+    Element.new('Google Login panel', :xpath, "//div[@class='card signin-card clearfix']").verify.visible
+    Element.new('ProtoTest Logo', :xpath, "//h1[@id='logo']//img").verify.not.visible
+    Driver.open_new_window("http://prototest.com")
+    Driver.switch_to_next_window
+    Driver.verify_url("prototest.com")
+    Element.new('Google Login panel', :xpath, "//div[@class='card signin-card clearfix']").verify.not.visible
+    Element.new('ProtoTest Logo', :xpath, "//h1[@id='logo']//img").verify.visible
+    Driver.switch_to_main_window
+    Driver.verify_url("accounts.google.com")
+  end
+
+  it 'Test 006 should switch between opened windows' do
+    Driver.visit("http://www.google.com")
+    Driver.verify_url("www.google.com")
+    Driver.open_new_window("http://wikipedia.org")
+    Driver.switch_to_window("Wikipedia")
+    Driver.verify_url("wikipedia.org")
+    Driver.switch_to_window("Google")
+    Driver.verify_url("www.google.com")
+  end
+
+  it 'Test 007 should list all open windows, then close one' do
+    Driver.visit("http://www.google.com")
+    Driver.open_new_window("http://wikipedia.org")
+    Driver.open_new_window("http://www.prototest.com")
+    Driver.list_open_windows
+    Driver.driver.window_handles.length.should eql(3)
+    Driver.switch_to_window("Wikipedia")
+    Element.new('Wikipedia logo', :xpath, "//div[@class='central-featured-logo']").verify.visible
+    Element.new('Google logo', :xpath, "//*[@id='hplogo']").verify.not.visible
+    Driver.close_window
+    Driver.list_open_windows
+    Driver.switch_to_window("Google")
+    Element.new('Wikipedia logo', :xpath, "//div[@class='central-featured-logo']").verify.not.visible
+    Element.new('Google logo', :xpath, "//*[@id='hplogo']").verify.visible
+    Driver.list_open_windows
+    Driver.driver.window_handles.length.should eql(2)
+  end
+
 end
