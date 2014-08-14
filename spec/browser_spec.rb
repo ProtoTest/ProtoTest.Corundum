@@ -52,12 +52,12 @@ describe 'Browser driver spec' do
 
   it 'Test 006 should switch between opened windows' do
     Driver.visit("http://www.google.com")
-    Driver.verify_url("www.google.com")
+    Driver.verify_url("google.com")
     Driver.open_new_window("http://wikipedia.org")
     Driver.switch_to_window("Wikipedia")
     Driver.verify_url("wikipedia.org")
     Driver.switch_to_window("Google")
-    Driver.verify_url("www.google.com")
+    Driver.verify_url("google.com")
   end
 
   it 'Test 007 should list all open windows, then close one' do

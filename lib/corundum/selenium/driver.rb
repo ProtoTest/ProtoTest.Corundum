@@ -116,11 +116,11 @@ class Corundum::Selenium::Driver
   def self.verify_url(url)
     Log.debug('Verifying URL...')
     domain = self.current_domain.to_s
-    if url.include?(domain)
-      Log.debug("Confirmed. (#{url}) includes (#{domain}).")
+    if domain.include?(url)
+      Log.debug("Confirmed. (#{domain}) includes (#{url}).")
       $verification_passes += 1
     else
-      Log.error("(#{url}) does not include (#{domain}).")
+      Log.error("(#{domain}) does not include (#{url}).")
     end
   end
 
@@ -166,19 +166,19 @@ class Corundum::Selenium::Driver
   end
 
   def self.switch_to_window(title)
-    driver.switch_to.window(driver.window_handles.first)
     current_title = driver.title
     Log.debug("Current window is: (#{current_title}).  Switching to next window (#{title})...")
     handles = driver.window_handles
+    driver.switch_to.window(handles.first)
       handles.each do |handle|
+        driver.switch_to.window(handle)
         if driver.title == title
           Log.debug("Window (#{driver.title}) is now the active window.")
           return
         end
-        driver.switch_to.window(handle)
       end
     list_open_windows
-    Log.error("Unable to switch to window with title #{title}.")
+    Log.error("Unable to switch to window with title (#{title}).")
   end
 
   def self.switch_to_next_window
