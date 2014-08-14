@@ -113,7 +113,17 @@ class Corundum::Selenium::Element
       $verification_passes += 1
       ElementExtensions.hover_over(self) # Javascript workaround to above issue
     else
-      Log.error('Cannot click on element.  Element is not present.')
+      Log.error('Cannot hover over element.  Element is not present.')
+    end
+  end
+
+  def hover_away
+    Log.debug("Hovering away from element (#{self.to_s})...")
+    if element.enabled?
+      $verification_passes += 1
+      ElementExtensions.hover_away(self) # Javascript workaround to above issue
+    else
+      Log.error('Cannot hover away from element.  Element is not present.')
     end
   end
 
@@ -122,7 +132,7 @@ class Corundum::Selenium::Element
       $verification_passes += 1
       ElementExtensions.scroll_to(self)
     else
-      Log.error('Cannot click on element.  Element is not present.')
+      Log.error('Cannot scroll element into view.  Element is not present.')
     end
   end
 

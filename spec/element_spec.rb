@@ -138,7 +138,8 @@ describe 'Corundum Element spec' do
     Driver.visit('http://www.denverpost.com')
     Element.new('Tools', :xpath, "//a[@id='headerPrimaryToolsLink' and contains(.,'Tools')]").hover_over
     Element.new('Archives', :xpath, "//li[@id='headerSecondaryArchives']").wait_until.visible
-    $verification_passes.should eql(3)
+    Element.new('Tools', :xpath, "//a[@id='headerPrimaryToolsLink' and contains(.,'Tools')]").hover_away
+    $verification_passes.should eql(4)
   end
 
 end

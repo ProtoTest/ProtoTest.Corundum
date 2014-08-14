@@ -32,4 +32,9 @@ class Corundum::ElementExtensions
     sleep 2
   end
 
+  def self.hover_away(element)
+    Driver.execute_script("var evObj = document.createEvent('MouseEvents'); evObj.initMouseEvent(\"mouseout\",true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null); arguments[0].dispatchEvent(evObj);", element.element)
+    sleep 1
+  end
+
 end
