@@ -9,7 +9,7 @@ describe 'Browser driver spec' do
   it 'Test 001 should launch browser and url (specified by spec config)' do
     site = test_url #pulls from test config (above)
     test_driver.visit(site) #Driver pulls from test config (above)
-    test_driver.verify_url(site)
+    test_driver.verify_url("prototest.com")
     test_driver.visit('http://www.google.com')
     $verification_passes.should eql(3)
   end
@@ -17,14 +17,14 @@ describe 'Browser driver spec' do
   it 'Test 002 should launch browser and url (specified by config class)' do
     site = Corundum::Config::URL #pulls from framework config
     Driver.visit(site) #Driver pulls from framework config
-    Driver.verify_url(site)
+    Driver.verify_url("google.com")
     $verification_passes.should eql(2)
   end
 
   it 'Test 003 should launch browser and url (specified by spec helper)' do
     site = $url #pulls from spec_helper config
     Driver.visit(site) #Driver pulls from framework config
-    Driver.verify_url(site)
+    Driver.verify_url("google.com")
     $verification_passes.should eql(2)
   end
 

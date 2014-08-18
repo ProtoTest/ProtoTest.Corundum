@@ -4,13 +4,13 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
   spec.name          = 'corundum'
-  spec.version       = '1.0.2'
+  spec.version       = '1.0.3'
   spec.authors       = ['ProtoTest, LLC']
   spec.email         = ['info@prototest.com']
   spec.summary       = 'Selenium web automation framework in ruby.'
   spec.description   = 'Corundum was created to simplify the process of creating enterprise-scale automated testing suites.  The inclusion of advanced features, diagnostic information, easy configuration, and enhanced APIs helps make automating in code-based automation tools much more practical.'
   spec.homepage      = 'http://www.prototest.com'
-  spec.license       = 'pending'
+  spec.license       = 'Copyright (c) 2014 ProtoTest'
 
   spec.files         = `git ls-files -z`.split("\x0")
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
