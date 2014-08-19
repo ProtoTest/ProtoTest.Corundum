@@ -23,47 +23,57 @@ And then execute the bundle install:
 Or install it as:
     $ gem install corundum
 
+Note: requires a local copy of the file, as it is not currently hosted online.
+
 ## API Cheatsheet
 ### Driver
-* __visit(url)__ - navigates current browser window to the given url
-* __quit__ - closes current driver session.
-* __current_url__ - returns the current url (string).
-* __current_domain__ - returns the current domain (site.abc).
-* __verify_url(url)__ - verifies the given string (url) is within the current domain (e.g. "google.com" is within "www.google.com/gmail").
-* __execute_script(javascript, element)__ - executes the given javascript on the given element
-* __execute_script_driver(javascript)__ - executes the given javascript on the current browser window
-* __save_screenshot__ - captures a screenshot of the currently active browser
-* __open_new_window(url)__ - opens a new browser window and navigates to the given url
-* __close_window__ - closes the currently active browser window
-* __switch_to_window(title)__ - switches the driver to the browser window with the given title
-* __switch_to_next_window__ - switches the driver to the browser window NEXT in the order in which they were opened
-* __switch_to_main_window__ - switches the driver to the browser window FIRST in the order in which they were opened
+|Command|Description|
+|---|---|
+|visit(url)|Navigates current browser window to the given url|
+|quit|Closes current driver session|
+|current_url|Returns the current url (string)|
+|current_domain|Returns the current domain (site.abc)|
+|verify_url(url)|Verifies the given string (url) is within the current domain (e.g. "google.com" is within "google.com/gmail")|
+|execute_script(javascript, element)|Executes the given javascript on the given element|
+|execute_script_driver(javascript)|Executes the given javascript on the current browser window|
+|save_screenshot|Captures a screenshot of the currently active browser|
+|open_new_window(url)|Opens a new browser window and navigates to the given url|
+|close_window|Closes the currently active browser window|
+|switch_to_window(title)|Switches the driver to the browser window with the given title|
+|switch_to_next_window|Switches the driver to the browser window NEXT in the order in which they were opened|
+|switch_to_main_window|Switches the driver to the browser window FIRST in the order in which they were opened|
 
 ### Element
-* __verify(optional_timeout)__ - test marks the verification as a failure, but proceeds until test is complete (and then fails), with optional timeout
-* __wait_until(optional_timeout)__ - test fails immediately if the verification fails, with optional timeout
-* __click__ - clicks on the element
-* __send_keys(keyboard_characters)__ - types into the element
-* __hover_over__ - hovers over the element with the mouse
-* __hover_away__ - hovers away from the element
-* __scroll_into_view__ - scrolls the element into view
-* __text__ - returns the text within the element (string)
-* __save_element_screenshot__ - saves a cropped screenshot of the element itself
+|Command|Description|
+|---|---|
+|verify(optional_timeout)|Test marks the verification as a failure, but proceeds until test is complete (and then fails), with optional timeout|
+|wait_until(optional_timeout)|Test fails immediately if the verification fails, with optional timeout|
+|click|Clicks on the element|
+|send_keys(keyboard_characters)|Types into the element|
+|hover_over|Hovers over the element with the mouse|
+|hover_away|Hovers away from the element|
+|scroll_into_view|Scrolls the element into view|
+|text|Returns the text within the element (string)|
+|save_element_screenshot|Saves a cropped screenshot of the element itself|
 
 ### Element Verifications (combined with verify. and wait_until. above)
-* __text(words)__ - confirms the element contains the given text
-* __visible__ - confirms the element is visible to the user
-* __present__ - confirmed the element is present in the DOM
-* __not.__ - confirms the opposite of the verification following it (e.g. button.verify.not.visible)
+|Command|Description|
+|---|---|
+|text(words)|Confirms the element contains the given text
+|visible|Confirms the element is visible to the user
+|present|Confirmed the element is present in the DOM
+|not.|Confirms the opposite of the verification following it (e.g. button.verify.not.visible)
 
 ### Config Options
-* __$reports_output__ = system pathway where reports will be written to (defaults to "Dir.home")
-* __$target_ip__ = location of remote computer targetted for test execution (defaults to "localhost")
-* __$browser__ = browser to execute tests within (defaults to firefox)
-* __$url__ = url to load when used (defaults to "www.google.com")
-* __$page_timeout__ = time to wait for a page to load (defaults to "30")
-* __$element_timeout__ = time to wait for an element to load (defaults to "15")
-* __$log_level__ = displays the cumulative logging statements (defaults to "info".  options are: "debug", "info", "warn", "error")
-* __$highlight_verifications__ = true/false activator of highlight elements in green upon verification (defaults to "true")
-* __$highlight_duration__ = duration of the above element highlighting in seconds (defaults to "0.100")
-* __$screenshot_on_failure__ = true/false activator of screenshot capture on moment of test failure (defaults to "true")
+|Command|Description|Defaults to|
+|---|---|---|
+|$reports_output|System pathway where reports will be written to|"Dir.home"|
+|$target_ip|Location of remote computer targetted for test execution|"localhost"|
+|$browser|Browser to execute tests within|Firefox|
+|$url|Url to load when used|"www.google.com"|
+|$page_timeout|Time to wait for a page to load|30 (seconds)|
+|$element_timeout|Time to wait for an element to load|15 (seconds)|
+|$log_level|Displays the cumulative logging statements|Default = "info".  Options are: "debug", "info", "warn", "error"|
+|$highlight_verifications|True/false activator of highlight elements in green upon verification|true|
+|$highlight_duration|Duration of the above element highlighting|0.100 (seconds)|
+|$screenshot_on_failure|True/false activator of screenshot capture on moment of test failure|true|
