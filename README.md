@@ -25,6 +25,76 @@ Or install it as:
 
 Note: requires a local copy of the file, as it is not currently hosted online.
 
+## Usage Example
+***spec_helper.rb***
+(config options single-point-of-entry for framework + page objects)
+```ruby
+# Config Options
+$reports_output = (Dir.home.to_s + "/desktop")
+$target_ip = 'localhost'
+$browser = :firefox
+$url = 'http://www.google.com'
+$page_timeout = 30
+$element_timeout = 15
+$log_level = :debug
+$highlight_verifications = true
+$highlight_duration = 0.100
+$screenshot_on_failure = true
+
+# Framework Components
+require 'corundum'
+
+# Page Objects
+require 'page_objects/spec_page_objects_list'
+```
+
+***google_home.rb***
+(page object)
+```ruby
+require 'corundum'
+
+class GoogleHome
+  attr_reader :plus_you, :gmail_option, :images_option, :apps_option, :signin_button, :google_logo, :search_box, :search_button, :lucky_button
+
+  def initialize
+    @plus_you = Element.new('+You option', :xpath, "//a[@class='gb_d gb_f' and @data-pid='119']")
+    @gmail_option = Element.new('Gmail option', :xpath, "//a[@class='gb_d' and @data-pid='23']")
+    @images_option = Element.new('Images option', :xpath, "//a[@class='gb_d' and @data-pid='2']")
+    @apps_option = Element.new('Apps option', :xpath, "//a[@title='Apps']")
+    @signin_button = Element.new('Sign in option', :xpath, "//a[@id='gb_70']")
+    @google_logo = Element.new('Google logo', :xpath, "//*[@id='hplogo']")
+    @search_box = Element.new('Search box', :css, 'input.gbqfif')
+    @search_button = Element.new('Search button', :css, '#gbqfba')
+    @lucky_button = Element.new('Lucky button', :css, '#gbqfbb')
+  end
+
+  def search(text)
+    Log.info("Searching for #{text} using Google search field...")
+    @search_box.send_keys(text)
+  end
+
+end
+```
+
+***google_elements_spec.rb***
+ (test)
+```ruby
+require 'spec_helper'
+
+describe 'Google Elements spec' do
+  include_context 'corundum'
+  
+  it 'Test 001 should verify the google lucky-button element text is correct' do
+    Driver.visit('http://www.google.com')
+    google_home = GoogleHome.new   #Google page object
+    google_home.lucky_button.wait_until.visible
+    google_home.lucky_button.verify.text("I'm Feeling Lucky")
+    google_home.lucky_button.verify.not.text("I'm not Feeling Lucky!")
+  end
+  
+end
+```
+
 ## API Cheatsheet
 ### Driver
 |Command|Description|
