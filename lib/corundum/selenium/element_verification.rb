@@ -51,11 +51,11 @@ class Corundum::ElementVerification
         element_contains_text = element_text.eql?(text)
         if should_have_text && element_contains_text
           Log.debug("Confirming text (#{text}) is within element...")
-          Corundum::ElementExtensions.highlight(@element) if Corundum::Config::HIGHLIGHT_VERIFICATIONS
+          Corundum::ElementExtensions.highlight(@element) if Corundum.config.highlight_verifications
           log_success(pass_message)
         elsif !should_have_text && !element_contains_text
           Log.debug("Confirming text (#{text}) is NOT within element...")
-          Corundum::ElementExtensions.highlight(@element) if Corundum::Config::HIGHLIGHT_VERIFICATIONS
+          Corundum::ElementExtensions.highlight(@element) if Corundum.config.highlight_verifications
           log_success(pass_message)
         else
           log_issue("#{fail_message}  Element's text is: (#{element_text}).")
@@ -83,7 +83,7 @@ class Corundum::ElementVerification
       wait.until do
         element_is_displayed = @element.displayed?
         if element_is_displayed && should_be_visible
-          Corundum::ElementExtensions.highlight(@element) if Corundum::Config::HIGHLIGHT_VERIFICATIONS
+          Corundum::ElementExtensions.highlight(@element) if Corundum.config.highlight_verifications
           log_success(pass_message)
           return @element
         elsif !element_is_displayed && !should_be_visible
@@ -115,7 +115,7 @@ class Corundum::ElementVerification
       wait.until do
         element_is_present = @element.present?
         if element_is_present && should_be_present
-          Corundum::ElementExtensions.highlight(@element) if Corundum::Config::HIGHLIGHT_VERIFICATIONS
+          Corundum::ElementExtensions.highlight(@element) if Corundum.config.highlight_verifications
           log_success(pass_message)
           return @element
         elsif !element_is_present && !should_be_present

@@ -14,8 +14,8 @@ class Corundum::Selenium::Driver
 
   def self.reset
     driver.manage.delete_all_cookies
-    driver.manage.timeouts.page_load = Corundum::Config::PAGE_TIMEOUT
-    driver.manage.timeouts.implicit_wait = Corundum::Config::ELEMENT_TIMEOUT
+    driver.manage.timeouts.page_load = Corundum.config.page_load_timeout
+    driver.manage.timeouts.implicit_wait = Corundum.config.element_timeout
 
     # Ensure the browser is maximized to maximize visibility of element
     # Currently doesn't work with chromedriver, but the following workaround does:
@@ -32,17 +32,18 @@ class Corundum::Selenium::Driver
   def self.driver
     begin
       unless @@driver
-        @browser_type = Corundum::Config::BROWSER
-        if $target_ip && (!$target_ip.eql?('localhost'))
-          @@driver = Selenium::WebDriver.for(:remote, :url => "http://#{$target_ip}:4444/wd/hub", :desired_capabilities => Corundum::Config::BROWSER)
+        @browser_type = Corundum.config.browser
+        target_ip = Corundum.config.target_ip
+        if target_ip && (!target_ip.eql?('localhost'))
+          @@driver = Selenium::WebDriver.for(:remote, :url => "http://#{target_ip}:4444/wd/hub", :desired_capabilities => Corundum.config.browser)
         else
-          @@driver = Selenium::WebDriver.for(Corundum::Config::BROWSER)
+          @@driver = Selenium::WebDriver.for(Corundum.config.browser)
         end
         reset
       end
     rescue Exception => e
       Log.debug(e.backtrace.inspect)
-      Log.error("Driver did not load within (#{Corundum::Config::PAGE_TIMEOUT}) seconds.  [#{e.message}]")
+      Log.error("Driver did not load within (#{Corundum.config.page_load_timeout}) seconds.  [#{e.message}]")
     end
     @@driver
   end

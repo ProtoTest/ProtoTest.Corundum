@@ -25,7 +25,7 @@ class CustomFormatter < RSpec::Core::Formatters::HtmlFormatter
   # Overrides the Rspec method in order to inject extra content during a spec failure
   def extra_failure_content(failure)
 
-    if Corundum::Config::SCREENSHOT_ON_FAILURE
+    if Corundum.config.screenshot_on_failure
       @html = '<table border="1" cellpadding="10" style="font-size:12px; border-collapse:collapse;"><th>Screenshot captured during spec failure</th>'
       @html << "<tr><td><a href=#{shot}><img src=#{$fail_screenshot} style='max-width:800px;'></img></a></td></tr>"
       @html << '</table>'

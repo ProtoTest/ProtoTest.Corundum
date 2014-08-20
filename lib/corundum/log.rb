@@ -64,13 +64,13 @@ class Corundum::Log
 
     def error(msg)
       log.error(msg)
-      Driver.save_screenshot if Corundum::Config::SCREENSHOT_ON_FAILURE
+      Driver.save_screenshot if Corundum.config.screenshot_on_failure
       Kernel.fail(msg)
     end
 
     def warn(msg)
       log.warn(msg)
-      Driver.save_screenshot if Corundum::Config::SCREENSHOT_ON_FAILURE
+      Driver.save_screenshot if Corundum.config.screenshot_on_failure
       $verification_warnings << msg
     end
 
@@ -105,7 +105,7 @@ class Corundum::Log
       logger ||= Logger.new(STDOUT)
 
       # messages that have the set level or higher will be logged
-      case Corundum::Config::LOG_LEVEL
+      case Corundum.config.log_level
         when :debug then
           level = Logger::DEBUG
         when :info then

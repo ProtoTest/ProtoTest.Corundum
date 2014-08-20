@@ -4,7 +4,6 @@ describe 'Corundum Driver extensions spec' do
   include_context 'corundum'
 
   it 'Test 001 should highlight elements on test execution' do
-    $highlight_verifications = true
     Driver.visit('http://www.google.com')
     google_home = GoogleHome.new
     google_home.plus_you.verify.visible

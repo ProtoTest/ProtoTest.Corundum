@@ -1,27 +1,30 @@
 # Config class provides configuration hooks for tests to control aspects of runtime settings
 
 module Corundum
-  module Config
-    REPORTS_OUTPUT = $reports_output || Dir.home
-    TARGET_IP = $target_ip || 'localhost'
-    BROWSER = $browser || :firefox
-    URL = $url || 'www.google.com'
-    PAGE_TIMEOUT = $page_timeout || 30
-    ELEMENT_TIMEOUT = $element_timeout || 15
-    LOG_LEVEL = $log_level || :info
-    HIGHLIGHT_VERIFICATIONS = $highlight_verifications
-    HIGHLIGHT_DURATION = $highlight_duration || 0.100
-    SCREENSHOT_ON_FAILURE = $screenshot_on_failure
+  class << self
+    attr_accessor :config
+  end
 
-    #
-    # Add a Constant to the Config class
-    #
-    # @param [Symbol] constant - the constant to define within config. Ensure to use a Symbol and uppercase name
-    # @param [Type]  value - the value to give the constant
-    #
-    def self.add_update_config_value(constant, value)
-      self.const_set(constant, value)
+  def self.configure
+    self.config ||= Config.new
+    yield config
+  end
+
+  class Config
+    attr_accessor :report_dir, :target_ip, :browser, :url, :page_load_timeout, :element_timeout, :log_level
+    attr_accessor :highlight_verifications, :highlight_duration, :screenshot_on_failure
+
+    def initialize
+      @report_dir = Dir.home
+      @target_ip = "localhost"
+      @browser = :firefox
+      @url = "about:blank"
+      @page_load_timeout = 30
+      @element_timeout = 15
+      @log_level = :info
+      @highlight_verifications = false
+      @highlight_duration = 0.100
+      @screenshot_on_failure = false
     end
-
   end
 end
