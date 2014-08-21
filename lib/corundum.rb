@@ -25,6 +25,21 @@ include Corundum
 shared_context 'corundum' do
   include Corundum
 
+
+
+  RSpec.configure do |config|
+    # NOTE: rspec.configure can be executed multiple times and the below are additions to any user-generated options
+
+    # Allow it so rspec test cases do not need to have values associated with tagging
+    config.treat_symbols_as_metadata_keys_with_true_values = true
+
+    config.add_formatter :documentation, 'spec_execution_notes.txt'
+    config.add_formatter CustomFormatter, 'spec_results_report.html'
+    config.add_formatter JunitReporter, 'spec_execution_stats.xml'
+
+    config.add_setting :test_name, :default => 'Test'
+  end
+
   before(:all) do
     # Create the test report root directory
     report_root_dir = File.expand_path(File.join(Corundum.config.report_dir, 'spec_reports'))
@@ -38,19 +53,6 @@ shared_context 'corundum' do
     # Add the output log file for the rspec test run to the logger
     Log.add_device(File.open(File.join(current_run_report_dir, "spec_logging_output.log"), File::WRONLY | File::APPEND | File::CREAT))
 
-    RSpec.configure do |config|
-      # NOTE: rspec.configure can be executed multiple times and the below are additions to any user-generated options
-
-      # Allow it so rspec test cases do not need to have values associated with tagging
-      config.treat_symbols_as_metadata_keys_with_true_values = true
-
-      config.add_formatter :documentation, File.join(current_run_report_dir, 'spec_execution_notes.txt')
-      config.add_formatter CustomFormatter, File.join(current_run_report_dir, 'spec_results_report.html')
-      config.add_formatter JunitReporter, File.join(current_run_report_dir, 'spec_execution_stats.xml')
-
-      config.add_setting :test_name, :default => 'Test'
-    end
-
     $verifications_total = 0
     Log.info("BEGINNING TEST SUITE")
     Log.info("CREATING REPORT FOLDER @ #{$current_run_dir}")
@@ -61,6 +63,11 @@ shared_context 'corundum' do
     puts ("\n")
     Log.info("TEST SUITE COMPLETE")
     Log.info("Verifications confirmed: (#{$verifications_total} total).")
+
+    # move the rspec generated files into the test report dir
+    FileUtils.mv('spec_execution_notes.txt', $current_run_dir)
+    FileUtils.mv('spec_results_report.html', $current_run_dir)
+    FileUtils.mv('spec_execution_stats.xml', $current_run_dir)
   end
 
   before(:each) do
