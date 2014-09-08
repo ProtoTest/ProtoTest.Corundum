@@ -28,6 +28,7 @@ shared_context 'corundum' do
 
 
   RSpec.configure do |config|
+    Log.info("Configuring Corundum's RSpec options...")
     # NOTE: rspec.configure can be executed multiple times and the below are additions to any user-generated options
 
     # Allow it so rspec test cases do not need to have values associated with tagging
@@ -64,10 +65,10 @@ shared_context 'corundum' do
     Log.info("TEST SUITE COMPLETE")
     Log.info("Verifications confirmed: (#{$verifications_total} total).")
 
-    # move the rspec generated files into the test report dir
-    FileUtils.mv('spec_execution_notes.txt', $current_run_dir)
-    FileUtils.mv('spec_results_report.html', $current_run_dir)
-    FileUtils.mv('spec_execution_stats.xml', $current_run_dir)
+    # cp the rspec generated files into the test report dir
+    FileUtils.cp('spec_execution_notes.txt', $current_run_dir)
+    FileUtils.cp('spec_results_report.html', $current_run_dir)
+    FileUtils.cp('spec_execution_stats.xml', $current_run_dir)
   end
 
   before(:each) do

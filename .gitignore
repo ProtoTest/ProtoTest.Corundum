@@ -26,4 +26,4 @@ mkmf.log
 *.html
 *.log
 *.txt
-output.xml
+*.xml
