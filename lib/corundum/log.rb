@@ -64,14 +64,14 @@ class Corundum::Log
 
     def error(msg)
       log.error(msg)
-      Driver.save_screenshot if Corundum.config.screenshot_on_failure
-      Kernel.fail(msg)
+      Driver.save_screenshot('error') if Corundum.config.screenshot_on_failure
+      $verification_errors << msg
     end
 
     def warn(msg)
       log.warn(msg)
-      Driver.save_screenshot if Corundum.config.screenshot_on_failure
-      $verification_warnings << msg
+      Driver.save_screenshot('warning') if Corundum.config.screenshot_on_failure
+      $execution_warnings << msg
     end
 
     def info(msg)

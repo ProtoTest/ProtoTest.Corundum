@@ -4,6 +4,7 @@ describe 'Corundum logging spec' do
   include_context 'corundum'
 
   it 'Test 001 should use each of the logging statements' do
+    Driver.visit('http://www.google.com')
     sleep 1
     Log.debug('Debug example text.')
     sleep 1
@@ -11,11 +12,17 @@ describe 'Corundum logging spec' do
     sleep 1
     Log.warn('Warning example text.')
     sleep 1
-    $verification_warnings.length.should eql(1)
-    $verification_warnings = []
-    $verification_passes.should eql(0)
-    expect{Log.error('Error example text.')}.to raise_error
+    Log.error('Error example text.')
     sleep 1
+    Element.new('Verify element', :xpath, "//div[@id='shouldnotbeabletofindthis']").verify.present
+    sleep 1
+    Element.new('Verify element', :xpath, "//div[@id='shouldnotbeabletofindthistoo']").verify.present
+    sleep 1
+    Log.info("Errors caught as part of this test: (#{$verification_errors.length}).")
+    $verification_errors.length.should eql(3)
+    $verification_errors = []
+    sleep 1
+    Log.info('End of test.')
   end
 
   it 'Test 002 should use each of the screenshot captures' do

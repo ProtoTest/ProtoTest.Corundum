@@ -55,20 +55,11 @@ shared_context 'corundum' do
     Log.add_device(File.open(File.join(current_run_report_dir, "spec_logging_output.log"), File::WRONLY | File::APPEND | File::CREAT))
 
     $verifications_total = 0
+    $warnings_total = 0
+    $errors_total = 0
     Log.info("BEGINNING TEST SUITE")
     Log.info("CREATING REPORT FOLDER @ #{$current_run_dir}")
     Log.info("TARGET MACHINE: #{Corundum.config.target_ip}")
-  end
-
-  after(:all) do
-    puts ("\n")
-    Log.info("TEST SUITE COMPLETE")
-    Log.info("Verifications confirmed: (#{$verifications_total} total).")
-
-    # cp the rspec generated files into the test report dir
-    FileUtils.cp('spec_execution_notes.txt', $current_run_dir)
-    FileUtils.cp('spec_results_report.html', $current_run_dir)
-    FileUtils.cp('spec_execution_stats.xml', $current_run_dir)
   end
 
   before(:each) do
@@ -76,25 +67,65 @@ shared_context 'corundum' do
     Log.info("BEGINNING NEW TEST: #{example.description}")
     Log.info("BROWSER: #{Corundum.config.browser}")
     $verification_passes = 0
-    $verification_warnings = []
+    $execution_warnings = []
+    $verification_errors = []
+
+    $test_flag_fail_instantly = false
+    $test_flag_fail_end = false
+
+    $screenshots_message = []
     $screenshots_captured = []
+    $screenshots_data = {}
     $fail_screenshot = nil
   end
 
   after(:each) do
-    Log.debug('Executing test cleanup...')
+    Log.debug("Executing test cleanup...")
     Corundum::Selenium::Driver.quit
-    Log.info('TEST COMPLETE')
+
+    if $test_flag_fail_instantly
+      Log.info("TEST FAILED - CRITICAL ERROR DETECTED")
+    elsif $test_flag_fail_end
+      Log.info("TEST FAILED - VERIFICATION ERRORS DETECTED")
+    else
+      Log.info("TEST PASSED")
+    end
+
     Log.info("Verifications confirmed: (#{$verification_passes} total).")
     $verifications_total += $verification_passes
-    if $verification_warnings.empty?
+    $warnings_total += $execution_warnings.length
+    $errors_total += $verification_errors.length
+
+    if $execution_warnings.empty?
       Log.info("No warnings detected during test run.")
     else
-      Log.info("Warnings detected during test run (#{$verification_warnings.length} total).")
-      msg = "TEST FAILURE: Warnings detected during test execution:"
-      $verification_warnings.each { |warning_message| msg << "\n\t" + warning_message }
+      Log.info("Warnings detected during test run: (#{$execution_warnings.length} total).")
+      msg = "Warning detected during test execution:"
+      $execution_warnings.each { |error_message| msg << "\n\t" + error_message }
+    end
+
+    if $verification_errors.empty?
+      Log.info("No errors detected during test run.")
+    else
+      Log.info("Errors detected during test run: (#{$verification_errors.length} total).")
+      msg = "TEST FAILURE: Errors detected during test execution:"
+      $verification_errors.each { |error_message| msg << "\n\t" + error_message }
       Kernel.fail(msg)
     end
+
+  end
+
+  after(:all) do
+    puts ("\n")
+    Log.info("TEST SUITE COMPLETE")
+    Log.info("Verifications confirmed: (#{$verifications_total} total).")
+    Log.info("Warnings detected: (#{$warnings_total} total).")
+    Log.info("Errors detected: (#{$errors_total} total).")
+
+    # cp the rspec generated files into the test report dir
+    FileUtils.cp('spec_execution_notes.txt', $current_run_dir)
+    FileUtils.cp('spec_results_report.html', $current_run_dir)
+    FileUtils.cp('spec_execution_stats.xml', $current_run_dir)
   end
 
 end

@@ -123,6 +123,7 @@ class Corundum::Selenium::Driver
       $verification_passes += 1
     else
       Log.error("(#{current_url}) does not include (#{given_url}).")
+      Kernel.fail
     end
   end
 
@@ -138,13 +139,12 @@ class Corundum::Selenium::Driver
     driver.execute_script "return #{script}"
   end
 
-  def self.save_screenshot
+  def self.save_screenshot(type = 'saved')
     Log.debug ("Capturing screenshot of browser...")
     timestamp = Time.now.strftime("%Y_%m_%d__%H_%M_%S")
-    screenshot_path = File.join($current_run_dir, "screenshot__#{timestamp}.png")
+    screenshot_path = File.join($current_run_dir, "screenshot__#{timestamp}__#{type}.png")
     driver.save_screenshot(screenshot_path)
-    $screenshots_captured.push("screenshot__#{timestamp}.png") # used by custom_formatter.rb for embedding in report
-    $fail_screenshot = "screenshot__#{timestamp}.png"
+    $screenshots_captured.push("screenshot__#{timestamp}__#{type}.png")   # used by custom_formatter.rb for embedding in report
   end
 
   def self.list_open_windows

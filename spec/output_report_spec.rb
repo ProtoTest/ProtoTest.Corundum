@@ -7,7 +7,7 @@ describe 'Corundum output report spec' do
     Driver.visit('http://www.google.com')
     google_home = GoogleHome.new
     google_home.search('Test 01')
-    Driver.save_screenshot
+    Driver.save_screenshot('test')
   end
 
   it 'Test 002 should hard fail and capture a screenshot on failure' do
@@ -34,14 +34,14 @@ describe 'Corundum output report spec' do
     Log.info('Info example text.')
   end
 
-  it 'Test 005 should pass and take an element screenshot and then a whole browser screenshot' do
+  it 'Test 005 should pass and take an element screenshot, then a whole browser screenshot, and both again' do
     Driver.visit('http://www.google.com')
     google_home = GoogleHome.new
     google_home.google_logo.save_element_screenshot
-    Driver.save_screenshot
+    Driver.save_screenshot('test')
     google_home.search_button.save_element_screenshot
     google_home.search('Test 05')
-    Driver.save_screenshot
+    Driver.save_screenshot('test')
   end
 
   it 'Test 006 should pass without a screenshot' do

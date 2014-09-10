@@ -106,7 +106,7 @@ class Corundum::ElementVerification
       fail_message = "Element should be present."
       pass_message = "is present."
     else
-      fail_message = "Element should NOT present."
+      fail_message = "Element should NOT be present."
       pass_message = "is not present."
     end
 
@@ -152,14 +152,14 @@ class Corundum::ElementVerification
 
   private
 
-  # TODO: store the verification errors global in some test_data container
   def log_issue(message)
-    # error = "#{@@fail_base_str}#{@element.name}(#{@element.by}=>'#{@element.locator}'): #{message} after #{@timeout} seconds"
-    # $verification_errors << VerificationError.new(error, take_screenshot=true)
     if @fail_test
       Log.error("#{message} ['#{@element.name}' (By:(#{@element.by} => '#{@element.locator}'))].")
+      $test_flag_fail_instantly = true
+      Kernel.fail(message)
     else
-      Log.warn("#{message} ['#{@element.name}' (By:(#{@element.by} => '#{@element.locator}'))].")
+      Log.error("#{message} ['#{@element.name}' (By:(#{@element.by} => '#{@element.locator}'))].")
+      $test_flag_fail_end = true
     end
   end
 
