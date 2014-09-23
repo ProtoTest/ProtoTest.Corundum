@@ -127,10 +127,25 @@ class Corundum::Selenium::Driver
     end
   end
 
+  #
+  # Execute Javascript on the element
+  #
+  # @param [String] script - Javascript source to execute
+  # @param [Corundum::Selenium::Element] element
+  #
+  # @return The value returned from the script
+  #
   def self.execute_script(script, element)
     driver.execute_script(script, element)
   end
 
+  #
+  # Execute Javascript on the page
+  #
+  # @param [String] script - Javascript source to execute
+  #
+  # @return The value returned from the script
+  #
   def self.execute_script_driver(script)
     driver.execute_script(script)
   end
