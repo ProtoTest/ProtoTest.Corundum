@@ -21,7 +21,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'rake'
   spec.add_dependency 'rspec', '2.14.1'
   spec.add_dependency 'rspec-expectations', '2.14.5'
-  spec.add_dependency 'selenium-webdriver', '2.42.0'
+  spec.add_dependency 'selenium-webdriver', '2.43.0'
   spec.add_dependency 'builder'
   spec.add_dependency 'oily_png'
 
