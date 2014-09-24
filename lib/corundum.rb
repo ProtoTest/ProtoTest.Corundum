@@ -57,6 +57,11 @@ shared_context 'corundum' do
     $verifications_total = 0
     $warnings_total = 0
     $errors_total = 0
+    $execution_warnings = Array.new
+    $verification_errors = Array.new
+    $screenshots_message = Array.new
+    $screenshots_captured = Array.new
+
     Log.info("BEGINNING TEST SUITE")
     Log.info("CREATING REPORT FOLDER @ #{$current_run_dir}")
     Log.info("TARGET MACHINE: #{Corundum.config.target_ip}")
@@ -67,14 +72,14 @@ shared_context 'corundum' do
     Log.info("BEGINNING NEW TEST: #{example.description}")
     Log.info("BROWSER: #{Corundum.config.browser}")
     $verification_passes = 0
-    $execution_warnings = []
-    $verification_errors = []
+    $execution_warnings.clear
+    $verification_errors.clear
 
     $test_flag_fail_instantly = false
     $test_flag_fail_end = false
 
-    $screenshots_message = []
-    $screenshots_captured = []
+    $screenshots_message.clear
+    $screenshots_captured.clear
     $screenshots_data = {}
     $fail_screenshot = nil
   end

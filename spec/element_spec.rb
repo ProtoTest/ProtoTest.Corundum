@@ -41,7 +41,7 @@ describe 'Corundum Element spec' do
     google_home.lucky_button.verify.text("I'm not Feeling Lucky!")
     google_home.lucky_button.verify.text("I'm Feeling Lucky")
     $verification_warnings.length.should eql(1)
-    $verification_warnings = []
+    $verification_warnings = Array.new
     $verification_passes.should eql(4)
   end
 
@@ -51,7 +51,7 @@ describe 'Corundum Element spec' do
     google_home.lucky_button.verify.not.text("I'm Feeling Lucky")
     google_home.lucky_button.verify.not.text("I'm not Feeling Lucky!")
     $verification_warnings.length.should eql(1)
-    $verification_warnings = []
+    $verification_warnings = Array.new
     $verification_passes.should eql(4)
   end
 
@@ -87,7 +87,7 @@ describe 'Corundum Element spec' do
     google_home.lucky_button.verify.not.present
     google_home.lucky_button.verify.present
     $verification_warnings.length.should eql(1)
-    $verification_warnings = []
+    $verification_warnings = Array.new
     $verification_passes.should eql(2)
   end
 
@@ -97,7 +97,7 @@ describe 'Corundum Element spec' do
     google_home.lucky_button.verify.not.visible
     google_home.lucky_button.verify.visible
     $verification_warnings.length.should eql(1)
-    $verification_warnings = []
+    $verification_warnings = Array.new
     $verification_passes.should eql(2)
   end
 
@@ -106,7 +106,7 @@ describe 'Corundum Element spec' do
     Element.new('Random element', :css, '#no_id').verify.present
     Element.new('Random element', :xpath, '//*').verify.present
     $verification_warnings.length.should eql(1)
-    $verification_warnings = []
+    $verification_warnings = Array.new
     $verification_passes.should eql(2)
   end
 
@@ -115,7 +115,7 @@ describe 'Corundum Element spec' do
     Element.new('Random element', :css, '#no_id').verify.visible
     Element.new('Random element', :xpath, '//*').verify.visible
     $verification_warnings.length.should eql(1)
-    $verification_warnings = []
+    $verification_warnings = Array.new
     $verification_passes.should eql(2)
   end
 

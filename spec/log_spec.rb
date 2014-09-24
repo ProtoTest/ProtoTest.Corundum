@@ -20,7 +20,7 @@ describe 'Corundum logging spec' do
     sleep 1
     Log.info("Errors caught as part of this test: (#{$verification_errors.length}).")
     $verification_errors.length.should eql(3)
-    $verification_errors = []
+    $verification_errors = Array.new
     sleep 1
     Log.info('End of test.')
   end
