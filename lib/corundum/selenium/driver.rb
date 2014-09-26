@@ -41,11 +41,13 @@ class Corundum::Selenium::Driver
         end
         reset
       end
+      @@driver
     rescue Exception => e
       Log.debug(e.backtrace.inspect)
-      Log.error("Driver did not load within (#{Corundum.config.page_load_timeout}) seconds.  [#{e.message}]")
+      Log.info("Driver did not load within (#{Corundum.config.page_load_timeout}) seconds.  [#{e.message}]")
+      $test_flag_fail_instantly = true
+      Kernel.fail(e.message)
     end
-    @@driver
   end
 
   def self.driver= driver
