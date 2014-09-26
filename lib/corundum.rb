@@ -64,11 +64,10 @@ shared_context 'corundum' do
 
     Log.info("BEGINNING TEST SUITE")
     Log.info("CREATING REPORT FOLDER @ #{$current_run_dir}")
-    Log.info("TARGET MACHINE: #{Corundum.config.target_ip}")
+    Log.info("TARGET MACHINE: #{Corundum.config.target_ip}\n")
   end
 
   before(:each) do
-    puts ("\n")
     Log.info("BEGINNING NEW TEST: #{example.description}")
     Log.info("BROWSER: #{Corundum.config.browser}")
     $verification_passes = 0
@@ -110,7 +109,7 @@ shared_context 'corundum' do
     end
 
     if $verification_errors.empty?
-      Log.info("No errors detected during test run.")
+      Log.info("No errors detected during test run.\n")
     else
       Log.info("Errors detected during test run: (#{$verification_errors.length} total).")
       msg = "TEST FAILURE: Errors detected during test execution:"
@@ -121,7 +120,6 @@ shared_context 'corundum' do
   end
 
   after(:all) do
-    puts ("\n")
     Log.info("TEST SUITE COMPLETE")
     Log.info("Verifications confirmed: (#{$verifications_total} total).")
     Log.info("Warnings detected: (#{$warnings_total} total).")

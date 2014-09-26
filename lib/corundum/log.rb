@@ -62,10 +62,12 @@ class Corundum::Log
   # an unknown message that should always be logged
   # UNKNOWN = 5
 
-    def error(msg)
-      log.error(msg)
-      Driver.save_screenshot('error') if Corundum.config.screenshot_on_failure
-      $verification_errors << msg
+    def debug(msg)
+      log.debug(msg)
+    end
+
+    def info(msg)
+      log.info(msg)
     end
 
     def warn(msg)
@@ -74,12 +76,10 @@ class Corundum::Log
       $execution_warnings << msg
     end
 
-    def info(msg)
-      log.info(msg)
-    end
-
-    def debug(msg)
-      log.debug(msg)
+    def error(msg)
+      log.error(msg)
+      Driver.save_screenshot('error') if Corundum.config.screenshot_on_failure
+      $verification_errors << msg
     end
 
     def add_device device
@@ -93,6 +93,7 @@ class Corundum::Log
       @@devices.clear
       log.close if log
     end
+
 
     private
 
