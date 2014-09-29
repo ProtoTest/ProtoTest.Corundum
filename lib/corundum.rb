@@ -8,6 +8,7 @@ require 'config'
 require 'log'
 require 'junit_reporter'
 require 'custom_formatter'
+require 'spec_data'
 
 require 'driver'
 require 'driver_extensions'
@@ -54,13 +55,12 @@ shared_context 'corundum' do
     # Add the output log file for the rspec test run to the logger
     Log.add_device(File.open(File.join(current_run_report_dir, "spec_logging_output.log"), File::WRONLY | File::APPEND | File::CREAT))
 
+    # Reset Suite statistics
     $verifications_total = 0
     $warnings_total = 0
     $errors_total = 0
-    $execution_warnings = Array.new
-    $verification_errors = Array.new
-    $screenshots_message = Array.new
-    $screenshots_captured = Array.new
+
+    Spec_data.load_spec_state
 
     Log.info("BEGINNING TEST SUITE")
     Log.info("CREATING REPORT FOLDER @ #{$current_run_dir}")
@@ -70,53 +70,15 @@ shared_context 'corundum' do
   before(:each) do
     Log.info("BEGINNING NEW TEST: #{example.description}")
     Log.info("BROWSER: #{Corundum.config.browser}")
-    $verification_passes = 0
-    $execution_warnings.clear
-    $verification_errors.clear
-
-    $test_flag_fail_instantly = false
-    $test_flag_fail_end = false
-
-    $screenshots_message.clear
-    $screenshots_captured.clear
-    $screenshots_data = {}
-    $fail_screenshot = nil
+    Spec_data.clear_spec_state
+    Spec_data.reset_captured_screenshots
   end
 
   after(:each) do
     Log.debug("Executing test cleanup...")
     Corundum::Selenium::Driver.quit
-
-    if $test_flag_fail_instantly
-      Log.info("TEST FAILED - CRITICAL ERROR DETECTED")
-    elsif $test_flag_fail_end
-      Log.info("TEST FAILED - VERIFICATION ERRORS DETECTED")
-    else
-      Log.info("TEST PASSED")
-    end
-
-    Log.info("Verifications confirmed: (#{$verification_passes} total).")
-    $verifications_total += $verification_passes
-    $warnings_total += $execution_warnings.length
-    $errors_total += $verification_errors.length
-
-    if $execution_warnings.empty?
-      Log.info("No warnings detected during test run.")
-    else
-      Log.info("Warnings detected during test run: (#{$execution_warnings.length} total).")
-      msg = "Warning detected during test execution:"
-      $execution_warnings.each { |error_message| msg << "\n\t" + error_message }
-    end
-
-    if $verification_errors.empty?
-      Log.info("No errors detected during test run.\n")
-    else
-      Log.info("Errors detected during test run: (#{$verification_errors.length} total).")
-      msg = "TEST FAILURE: Errors detected during test execution:"
-      $verification_errors.each { |error_message| msg << "\n\t" + error_message }
-      Kernel.fail(msg)
-    end
-
+    Spec_data.compile_spec_statistics
+    Spec_data.determine_spec_result
   end
 
   after(:all) do
