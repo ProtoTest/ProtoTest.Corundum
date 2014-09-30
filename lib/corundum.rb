@@ -60,6 +60,7 @@ shared_context 'corundum' do
     $warnings_total = 0
     $errors_total = 0
 
+    Spec_data.load_suite_state
     Spec_data.load_spec_state
 
     Log.info("BEGINNING TEST SUITE")
@@ -77,7 +78,8 @@ shared_context 'corundum' do
   after(:each) do
     Log.debug("Executing test cleanup...")
     Corundum::Selenium::Driver.quit
-    Spec_data.compile_spec_statistics
+    Log.info("Verifications confirmed: (#{$verification_passes} total).")
+    Spec_data.add_spec_stats_to_suite_stats
     Spec_data.determine_spec_result
   end
 

@@ -45,7 +45,7 @@ class Corundum::Selenium::Driver
     rescue Exception => e
       Log.debug(e.backtrace.inspect)
       Log.info("Driver did not load within (#{Corundum.config.page_load_timeout}) seconds.  [#{e.message}]")
-      $test_flag_fail_instantly = true
+      $fail_test_instantly = true
       Kernel.fail(e.message)
     end
   end

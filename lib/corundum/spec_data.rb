@@ -1,20 +1,25 @@
 
 class Spec_data
 
+  def self.load_suite_state
+    $screenshots_message = Array.new
+    $screenshots_captured = Array.new
+  end
+
   def self.load_spec_state
     $execution_warnings = Array.new
     $verification_errors = Array.new
     $verification_passes = 0
-    $screenshots_message = Array.new
-    $screenshots_captured = Array.new
+    $fail_test_instantly = false
+    $fail_test_at_end = false
   end
 
   def self.clear_spec_state
     $execution_warnings.clear
     $verification_errors.clear
     $verification_passes = 0
-    $test_flag_fail_instantly = false
-    $test_flag_fail_end = false
+    $fail_test_instantly = false
+    $fail_test_at_end = false
   end
 
   def self.reset_captured_screenshots
@@ -41,10 +46,10 @@ class Spec_data
       $verification_errors.each { |error_message| msg << "\n\t" + error_message }
     end
 
-    if $test_flag_fail_instantly
+    if $fail_test_instantly
       Log.info("TEST FAILED - CRITICAL ERROR DETECTED")
       Kernel.fail("TEST FAILED - CRITICAL ERROR DETECTED\n")
-    elsif $test_flag_fail_end
+    elsif $fail_test_at_end
       Log.info("TEST FAILED - VERIFICATION ERRORS DETECTED")
       Kernel.fail("TEST FAILED - VERIFICATION ERRORS DETECTED\n")
     else
@@ -52,8 +57,7 @@ class Spec_data
     end
   end
 
-  def self.compile_spec_statistics
-    Log.info("Verifications confirmed: (#{$verification_passes} total).")
+  def self.add_spec_stats_to_suite_stats
     $verifications_total += $verification_passes
     $warnings_total += $execution_warnings.length
     $errors_total += $verification_errors.length

@@ -155,11 +155,11 @@ class Corundum::ElementVerification
   def log_issue(message)
     if @fail_test
       Log.error("#{message} ['#{@element.name}' (By:(#{@element.by} => '#{@element.locator}'))].")
-      $test_flag_fail_instantly = true
+      $fail_test_instantly = true
       Kernel.fail(message)
     else
       Log.error("#{message} ['#{@element.name}' (By:(#{@element.by} => '#{@element.locator}'))].")
-      $test_flag_fail_end = true
+      $fail_test_at_end = true
     end
   end
 
